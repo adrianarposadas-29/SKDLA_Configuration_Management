@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DocConfig — Document Configuration Management | ClearPath Operating System</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.5.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+:root{
+  --cp-bg:#EEF3F8;--cp-white:#fff;--cp-navy:#1A2B4A;--cp-blue:#4A7DB5;
+  --cp-blue-hdr:#5B9BD5;--cp-blue-active:#3A6EA8;--cp-blue-lt:#D6E8F7;
+  --cp-orange:#E87722;--cp-green:#5CB85C;--cp-red:#D9534F;--cp-amber:#C8922A;
+  --cp-gray:#8A9BB0;--cp-gray-lt:#C5D3E0;--cp-border:#C5D3E0;--cp-row-alt:#F5F8FC;
+  --qa-color:#2E7D32;--qa-lt:#E8F5E9;--qa-border:#A5D6A7;
+  --sa-color:#B71C1C;--sa-lt:#FFEBEE;--sa-border:#EF9A9A;
+}
+html,body{height:100%;overflow:hidden;background:var(--cp-bg)}
+.app{background:var(--cp-bg);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.cp-header{background:var(--cp-white);border-bottom:2px solid var(--cp-blue-lt);padding:9px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 1px 4px rgba(26,43,74,.08)}
+.cp-logo-area{display:flex;align-items:center;gap:14px}
+.cp-logo-mark{display:flex;flex-direction:column}
+.cp-logo-icon{display:flex;align-items:center;gap:7px}
+.cp-logo-icon span{font-size:17px;font-weight:700;color:var(--cp-navy);letter-spacing:-.3px}
+.cp-logo-sub{font-size:8px;font-weight:700;color:var(--cp-orange);text-transform:uppercase;letter-spacing:.14em;margin-top:1px;padding-left:30px}
+.cp-divider{width:1px;height:34px;background:var(--cp-border)}
+.cp-app-title{font-size:15px;font-weight:700;color:var(--cp-navy)}
+.cp-app-sub{font-size:10px;color:var(--cp-gray);margin-top:2px}
+.cp-sk-text p{font-size:11px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.08em;line-height:1.3;text-align:right}
+.cp-sk-text span{font-size:9px;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.04em}
+.nav-bar{background:var(--cp-white);border-bottom:1px solid var(--cp-border);display:flex;align-items:stretch;flex-shrink:0;overflow-x:auto}
+.nav-group{display:flex;align-items:stretch;padding:0 6px;border-right:1px solid var(--cp-border)}
+.nav-group:last-child{border-right:none;margin-left:auto}
+.ni{display:flex;align-items:center;gap:5px;padding:9px 10px;font-size:10px;font-weight:700;color:var(--cp-gray);cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none}
+.ni:hover{color:var(--cp-blue)}
+.ni.active{color:var(--cp-blue-active);border-bottom-color:var(--cp-blue-active)}
+.ni.qa-tab.active{color:var(--qa-color);border-bottom-color:var(--qa-color)}
+.ni.sa-tab.active{color:var(--sa-color);border-bottom-color:var(--sa-color)}
+.ni i{font-size:13px}
+.nbadge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;background:var(--cp-red);color:#fff;margin-left:2px}
+.nbadge.info{background:var(--cp-blue-active)}
+.nbadge.qa{background:var(--qa-color)}
+.nbadge.sa{background:var(--sa-color)}
+.nbadge.warn{background:var(--cp-amber)}
+.body{flex:1;display:flex;overflow:hidden}
+.sidebar{width:192px;border-right:1px solid var(--cp-border);background:var(--cp-white);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sb-sec{padding:4px 0}
+.sb-lbl{font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.1em;padding:8px 12px 3px}
+.sni{display:flex;align-items:center;gap:6px;padding:6px 12px;font-size:11px;color:var(--cp-navy);cursor:pointer;border-left:3px solid transparent;transition:all .1s;user-select:none}
+.sni:hover{background:var(--cp-blue-lt);color:var(--cp-blue-active)}
+.sni.active{background:#EAF2FB;color:var(--cp-blue-active);font-weight:600;border-left-color:var(--cp-blue-active)}
+.sni.qa-item.active{background:var(--qa-lt);color:var(--qa-color);border-left-color:var(--qa-color)}
+.sni.sa-item.active{background:var(--sa-lt);color:var(--sa-color);border-left-color:var(--sa-color)}
+.sni i{font-size:13px;color:var(--cp-blue);flex-shrink:0}
+.sni.active i,.sni.qa-item.active i,.sni.sa-item.active i{color:inherit}
+.snbadge{margin-left:auto;font-size:9px;font-weight:700;padding:1px 5px;border-radius:7px;background:var(--cp-amber);color:#fff}
+.snbadge.d{background:var(--cp-red)}
+.sb-div{height:1px;background:var(--cp-border);margin:3px 0}
+.sb-foot{margin-top:auto;padding:10px 12px;border-top:1px solid var(--cp-border);background:var(--cp-row-alt)}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.toolbar{display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid var(--cp-border);background:var(--cp-white);flex-shrink:0}
+.sw{position:relative;flex:1}
+.sw i{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--cp-gray)}
+.sw input{width:100%;padding:6px 10px 6px 30px;font-size:12px;border-radius:3px;border:1px solid var(--cp-border);background:var(--cp-bg);color:var(--cp-navy)}
+.sw input:focus{outline:none;border-color:var(--cp-blue)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;font-size:10px;font-weight:700;border-radius:3px;border:1px solid var(--cp-border);background:var(--cp-white);cursor:pointer;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.05em;transition:background .1s;white-space:nowrap}
+.btn:hover{background:var(--cp-blue-lt)}
+.btn.pri{background:var(--cp-blue-active);border-color:var(--cp-blue-active);color:#fff}
+.btn.pri:hover{background:var(--cp-blue)}
+.btn.qa-btn{background:var(--qa-color);border-color:var(--qa-color);color:#fff}
+.btn.qa-btn:hover{opacity:.85}
+.btn.sa-btn{background:var(--sa-color);border-color:var(--sa-color);color:#fff}
+.btn.sa-btn:hover{opacity:.85}
+.btn i{font-size:13px}
+.content{flex:1;overflow-y:auto;padding:14px 16px}
+.view{display:none}
+.view.active{display:block}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:13px}
+.sc{background:var(--cp-white);border:1px solid var(--cp-border);border-radius:3px;padding:11px 13px;border-top:3px solid var(--cp-blue-hdr)}
+.sc.qa-card{border-top-color:var(--qa-color)}
+.sc.sa-card{border-top-color:var(--sa-color)}
+.sl{font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.sv{font-size:22px;font-weight:700;color:var(--cp-navy)}
+.ss{font-size:10px;color:var(--cp-gray);margin-top:2px}
+.fr{display:flex;gap:5px;margin-bottom:11px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:2px;font-size:10px;font-weight:600;border:1px solid var(--cp-border);cursor:pointer;background:var(--cp-white);color:var(--cp-gray);text-transform:uppercase;letter-spacing:.04em;user-select:none}
+.chip.active{background:var(--cp-blue-active);border-color:var(--cp-blue-active);color:#fff}
+.chip.qa-chip.active{background:var(--qa-color);border-color:var(--qa-color);color:#fff}
+.chip.sa-chip.active{background:var(--sa-color);border-color:var(--sa-color);color:#fff}
+.tbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;background:var(--cp-white);border:1px solid var(--cp-border)}
+.tbl thead tr{background:var(--cp-blue-hdr)}
+.tbl th{text-align:left;padding:7px 9px;font-size:9px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;border-right:1px solid rgba(255,255,255,.2)}
+.tbl th:last-child{border-right:none}
+.tbl td{padding:8px 9px;border-bottom:1px solid var(--cp-border);border-right:1px solid var(--cp-border);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cp-navy)}
+.tbl td:last-child{border-right:none}
+.tbl tr:nth-child(even) td{background:var(--cp-row-alt)}
+.tbl tr:hover td{background:var(--cp-blue-lt);cursor:pointer}
+.mid{font-family:monospace;font-size:10px;color:var(--cp-blue-active);font-weight:700}
+.mtitle{font-weight:600;font-size:11px}
+.mdesc{font-size:10px;color:var(--cp-gray);margin-top:1px}
+.sp{display:inline-flex;align-items:center;font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.s-act{background:#DFF0D8;color:#3C763D}
+.s-rev{background:#FCF8E3;color:#8A6D3B;border:1px solid #FAEBCC}
+.s-drf{background:#F5F5F5;color:var(--cp-gray);border:1px solid var(--cp-border)}
+.s-arc{background:#F2DEDE;color:#A94442}
+.s-open{background:#FFEBEE;color:#B71C1C;border:1px solid #EF9A9A}
+.s-closed{background:#DFF0D8;color:#2E7D32}
+.s-monitor{background:#FFF3E0;color:#E65100;border:1px solid #FFCC80}
+.tag{display:inline-block;font-size:9px;font-weight:600;padding:1px 5px;border-radius:2px;background:var(--cp-blue-lt);color:var(--cp-blue-active);border:1px solid #B8D4EE;margin-right:2px;text-transform:uppercase}
+.panel{background:var(--cp-white);border:1px solid var(--cp-border);border-radius:3px;padding:13px;margin-bottom:11px}
+.pt{font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid var(--cp-border)}
+.ai{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--cp-border)}
+.ai:last-child{border-bottom:none}
+.ait{font-size:12px;font-weight:600;color:var(--cp-navy)}
+.aim{font-size:10px;color:var(--cp-gray);margin-top:2px}
+.bs{display:inline-flex;align-items:center;gap:3px;padding:4px 8px;font-size:10px;font-weight:600;border-radius:2px;border:1px solid var(--cp-border);background:var(--cp-white);cursor:pointer;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.03em}
+.bs:hover{background:var(--cp-blue-lt)}
+.bs.ap{background:#DFF0D8;border-color:#D6E9C6;color:#3C763D}
+.bs.rj{background:#F2DEDE;border-color:#EBCCD1;color:#A94442}
+.vi{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--cp-border)}
+.vi:last-child{border-bottom:none}
+.vd{width:10px;height:10px;border-radius:50%;background:var(--cp-gray-lt);flex-shrink:0;margin-top:3px}
+.vd.cur{background:var(--cp-blue-active)}
+.rl{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--cp-border)}
+.rl:last-child{border-bottom:none}
+.rav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.rbadge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px;text-transform:uppercase}
+.rb-admin{background:#D9EDF7;color:#31708F}
+.rb-appr{background:#FCF8E3;color:#8A6D3B}
+.rb-auth{background:#DFF0D8;color:#3C763D}
+.rb-view{background:#F5F5F5;color:var(--cp-gray);border:1px solid var(--cp-border)}
+.type-tab{display:flex;border-bottom:2px solid var(--cp-border);margin-bottom:13px}
+.tt{padding:8px 14px;font-size:10px;font-weight:700;cursor:pointer;color:var(--cp-gray);border-bottom:2px solid transparent;margin-bottom:-2px;text-transform:uppercase;letter-spacing:.06em;user-select:none}
+.tt.active{color:var(--cp-blue-active);border-bottom-color:var(--cp-blue-active)}
+.sect-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.sect-title{font-size:13px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.04em}
+.wf-circle{width:26px;height:26px;border-radius:50%;background:var(--cp-blue-active);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.wf-lbl{font-size:9px;color:var(--cp-gray);text-align:center;max-width:68px;line-height:1.3;font-weight:600;text-transform:uppercase}
+.wf-line{flex:1;height:2px;background:var(--cp-blue-lt);margin-top:-12px;min-width:8px}
+.wf-card{border:1px solid var(--cp-border);border-radius:3px;padding:12px;margin-bottom:9px;background:var(--cp-white);border-left:3px solid var(--cp-blue-active)}
+.wf-name{font-size:12px;font-weight:700;color:var(--cp-navy)}
+.add-step-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;font-size:10px;font-weight:600;border:1px dashed var(--cp-border);border-radius:2px;cursor:pointer;color:var(--cp-gray);background:transparent;text-transform:uppercase;margin-top:6px}
+.add-step-btn:hover{background:var(--cp-blue-lt);color:var(--cp-blue-active)}
+.spec-card{border:1px solid var(--cp-border);border-radius:3px;padding:11px;margin-bottom:8px;background:var(--cp-white);border-left:3px solid var(--cp-amber);display:flex;align-items:flex-start;gap:10px}
+.spec-icon{width:34px;height:34px;border-radius:3px;background:#FFF3E0;border:1px solid #FFCC80;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:#8A4500}
+.lib-badge{font-size:9px;font-weight:600;padding:2px 6px;border-radius:2px;background:#FFF3E0;color:#8A4500;border:1px solid #FFCC80;text-transform:uppercase;margin-right:3px}
+.tmpl-card{border:1px solid var(--cp-border);border-radius:3px;padding:11px;margin-bottom:8px;background:var(--cp-white);border-left:3px solid #7B5EA7}
+.tmpl-card.retired{border-left-color:var(--cp-amber);background:#FFFDF5;opacity:.85}
+.tmpl-cat{font-size:9px;font-weight:700;padding:2px 6px;border-radius:2px;background:#F3E8FF;color:#5B3FA6;border:1px solid #CE93D8;text-transform:uppercase;margin-left:8px}
+.ver-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:#EEF3F8;color:var(--cp-navy);border:1px solid var(--cp-border);font-family:monospace;margin-left:6px}
+.rev-timeline{border-left:2px solid var(--cp-blue-lt);margin-left:10px;padding-left:14px}
+.rev-entry{position:relative;padding:8px 0 8px 2px;border-bottom:1px solid var(--cp-border)}
+.rev-entry:last-child{border-bottom:none}
+.rev-dot{position:absolute;left:-19px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--cp-gray-lt);border:2px solid var(--cp-white);box-shadow:0 0 0 2px var(--cp-gray-lt)}
+.rev-dot.current{background:var(--cp-blue-active);box-shadow:0 0 0 2px var(--cp-blue-lt)}
+.rev-dot.retired{background:var(--cp-amber);box-shadow:0 0 0 2px #FFE0B2}
+.reason-chip{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:#FFF3E0;color:#8A4500;border:1px solid #FFCC80;text-transform:uppercase;margin-right:4px}
+.alert-card{border-radius:3px;padding:12px;margin-bottom:9px;display:flex;gap:11px;align-items:flex-start}
+.alert-card.qa{background:var(--qa-lt);border:1px solid var(--qa-border);border-left:4px solid var(--qa-color)}
+.alert-card.sa{background:var(--sa-lt);border:1px solid var(--sa-border);border-left:4px solid var(--sa-color)}
+.alert-icon{width:36px;height:36px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.alert-icon.qa{background:rgba(46,125,50,.12);color:var(--qa-color)}
+.alert-icon.sa{background:rgba(183,28,28,.12);color:var(--sa-color)}
+.atag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:2px;text-transform:uppercase}
+.atag.qa{background:rgba(46,125,50,.15);color:var(--qa-color)}
+.atag.sa{background:rgba(183,28,28,.15);color:var(--sa-color)}
+.pri-crit{background:#B71C1C;color:#fff}
+.pri-high{background:#E64A19;color:#fff}
+.pri-med{background:#F57F17;color:#fff}
+.pri-low{background:var(--cp-gray);color:#fff}
+.media-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.media-thumb-vid{width:56px;height:42px;border-radius:3px;background:#1A2B4A;display:flex;align-items:center;justify-content:center;border:1px solid var(--cp-border);flex-shrink:0}
+.media-thumb-vid i{color:#fff;font-size:17px}
+.media-thumb-img{width:56px;height:42px;border-radius:3px;background:var(--cp-blue-lt);border:1px solid var(--cp-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.media-thumb-img i{color:var(--cp-blue-active);font-size:16px}
+.file-drop{border:2px dashed var(--cp-border);border-radius:3px;padding:14px;text-align:center;color:var(--cp-gray);font-size:11px;cursor:pointer;transition:all .15s;margin-top:6px}
+.file-drop:hover{border-color:var(--cp-blue);background:var(--cp-blue-lt);color:var(--cp-blue-active)}
+.file-drop.qa-drop:hover{border-color:var(--qa-color);background:var(--qa-lt);color:var(--qa-color)}
+.file-drop.sa-drop:hover{border-color:var(--sa-color);background:var(--sa-lt);color:var(--sa-color)}
+.attach-item{display:flex;align-items:center;gap:8px;padding:5px 9px;border:1px solid var(--cp-border);border-radius:3px;background:var(--cp-bg);margin-top:5px}
+.attach-name{flex:1;font-size:11px;color:var(--cp-navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.attach-remove{background:none;border:none;cursor:pointer;color:var(--cp-gray);font-size:13px;padding:0 2px}
+.attach-remove:hover{color:var(--cp-red)}
+.lib-check-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--cp-border);font-size:11px}
+.lib-check-row:last-child{border-bottom:none}
+.lib-check-row input[type=checkbox]{accent-color:var(--cp-blue-active);width:14px;height:14px}
+.alert-form-block{background:var(--cp-row-alt);border:1px solid var(--cp-border);border-radius:3px;padding:11px;margin-bottom:9px}
+.alert-form-block-title{font-size:10px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.section-divider{font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;padding:8px 0 4px;border-top:1px solid var(--cp-border);margin-top:8px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(26,43,74,.45);align-items:center;justify-content:center;z-index:200}
+.modal-bg.open{display:flex}
+.modal{background:var(--cp-white);border:1px solid var(--cp-border);border-radius:4px;width:520px;max-height:88vh;overflow-y:auto;padding:20px;border-top:4px solid var(--cp-blue-active)}
+.modal.wide{width:580px}
+.modal.qa-modal{border-top-color:var(--qa-color)}
+.modal.sa-modal{border-top-color:var(--sa-color)}
+.modal h2{font-size:13px;font-weight:700;color:var(--cp-navy);margin-bottom:14px;text-transform:uppercase;letter-spacing:.05em}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.fg input,.fg select,.fg textarea{width:100%;font-size:12px;padding:7px 10px;border:1px solid var(--cp-border);border-radius:3px;background:var(--cp-bg);color:var(--cp-navy)}
+.fg textarea{resize:vertical}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--cp-blue)}
+.mf{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--cp-border)}
+.rp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--cp-navy);border-radius:4px;padding:10px 16px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .2s;z-index:999;pointer-events:none;color:#fff;box-shadow:0 4px 16px rgba(26,43,74,.3)}
+.toast.show{opacity:1}
+.tr-tab.active{color:#5B3FA6;border-bottom-color:#5B3FA6}
+.sni.tr-item.active{background:#F3E8FF;color:#5B3FA6;border-left-color:#5B3FA6}
+.sni.tr-item.active i{color:inherit}
+.nbadge.tr{background:#5B3FA6}
+.tr-pkg-card{border:1px solid var(--cp-border);border-radius:3px;padding:13px;margin-bottom:10px;background:var(--cp-white);border-left:4px solid #7B5EA7}
+.tr-pkg-card:hover{box-shadow:0 2px 8px rgba(26,43,74,.1)}
+.tr-plan-card{border:1px solid var(--cp-border);border-radius:3px;padding:10px 12px;margin-bottom:7px;background:var(--cp-white);display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:all .1s}
+.tr-plan-card:hover{background:var(--cp-blue-lt)}
+.tr-plan-card.selected{background:#F3E8FF;border-color:#CE93D8;border-left:3px solid #7B5EA7}
+.tr-sop-pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;background:#F3E8FF;color:#5B3FA6;border:1px solid #CE93D8;margin:2px}
+.tr-step{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--cp-border)}
+.tr-step:last-child{border-bottom:none}
+.tr-step-num{width:22px;height:22px;border-radius:50%;background:#7B5EA7;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.progress-bar-bg{height:6px;border-radius:3px;background:var(--cp-blue-lt);overflow:hidden;margin-top:4px}
+.progress-bar-fill{height:100%;border-radius:3px;background:#7B5EA7;transition:width .3s}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- HEADER -->
+  <div class="cp-header">
+    <div class="cp-logo-area">
+      <div class="cp-logo-mark">
+        <div class="cp-logo-icon">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <path d="M14 3C8 3 3 8 3 14s5 11 11 11 11-5 11-11S20 3 14 3z" fill="#1A2B4A" opacity=".12"/>
+            <circle cx="14" cy="14" r="8" fill="none" stroke="#1A2B4A" stroke-width="1.5"/>
+            <path d="M10 14l3 3 5-6" stroke="#4A7DB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>ClearPath</span>
+        </div>
+        <div class="cp-logo-sub">Operating System</div>
+      </div>
+      <div class="cp-divider"></div>
+      <div>
+        <div class="cp-app-title">Document Configuration Management</div>
+        <div class="cp-app-sub">Manufacturing Operations &mdash; SOPs, Drawings, Specifications &amp; Alerts</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <svg width="38" height="38" viewBox="0 0 36 36" fill="none">
+        <rect width="36" height="36" rx="4" fill="#EEF3F8"/>
+        <path d="M18 5l8 6.5v7L18 25l-8-6.5v-7z" fill="#4A7DB5" opacity=".25"/>
+        <path d="M18 5l8 6.5v7L18 25l-8-6.5v-7z" fill="none" stroke="#3A6EA8" stroke-width="1.2"/>
+        <path d="M18 9l5 4v5l-5 4-5-4v-5z" fill="#3A6EA8"/>
+      </svg>
+      <div class="cp-sk-text"><p>Spectrum</p><p>Killian</p><span>Document Mgmt.</span></div>
+    </div>
+  </div>
+
+  <!-- NAV BAR -->
+  <div class="nav-bar">
+    <div class="nav-group">
+      <div class="ni active" onclick="navTop('sop-lib',this)"><i class="ti ti-file-description"></i> SOP Library</div>
+      <div class="ni" onclick="navTop('ed-lib',this)"><i class="ti ti-blueprint"></i> Drawings</div>
+      <div class="ni" onclick="navTop('specs',this)"><i class="ti ti-books"></i> Specifications <span class="nbadge info" id="spec-nav-ct">12</span></div>
+      <div class="ni" onclick="navTop('templates',this)"><i class="ti ti-template"></i> Templates <span class="nbadge info" id="tmpl-nav-ct">4</span></div>
+    </div>
+    <div class="nav-group">
+      <div class="ni qa-tab" onclick="navTop('qa-lib',this)"><i class="ti ti-checkbox"></i> Quality Alerts <span class="nbadge qa" id="qa-nav-ct">5</span></div>
+      <div class="ni qa-tab" onclick="navTop('qa-new',this)"><i class="ti ti-plus"></i> New QA</div>
+      <div class="ni sa-tab" onclick="navTop('sa-lib',this)"><i class="ti ti-alert-triangle"></i> Safety Alerts <span class="nbadge sa" id="sa-nav-ct">4</span></div>
+      <div class="ni sa-tab" onclick="navTop('sa-new',this)"><i class="ti ti-plus"></i> New SA</div>
+    </div>
+    <div class="nav-group">
+      <div class="ni" onclick="navTop('approvals',this)"><i class="ti ti-checks"></i> Approvals <span class="nbadge" id="appr-count">6</span></div>
+      <div class="ni" onclick="navTop('versions',this)"><i class="ti ti-versions"></i> History</div>
+      <div class="ni" onclick="navTop('wf-config',this)"><i class="ti ti-settings-2"></i> Workflows</div>
+      <div class="ni" onclick="navTop('roles',this)"><i class="ti ti-users"></i> Roles</div>
+      <div class="ni tr-tab" onclick="navTop('training',this)"><i class="ti ti-school"></i> Training <span class="nbadge tr" id="tr-nav-ct">3</span></div>
+    </div>
+    <div class="nav-group" style="border-right:none">
+      <div class="ni" style="cursor:default;color:var(--cp-gray)"><i class="ti ti-user-circle"></i> Jamie Mercer &middot; Admin</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div id="sb-sop">
+        <div class="sb-sec">
+          <div class="sb-lbl">SOP Status</div>
+          <div class="sni active" onclick="filterNavStatus(null,'sop',this)"><i class="ti ti-layout-list"></i> All SOPs</div>
+          <div class="sni" onclick="filterNavStatus('Active','sop',this)"><i class="ti ti-circle-check"></i> Active</div>
+          <div class="sni" onclick="filterNavStatus('Under Review','sop',this)"><i class="ti ti-clock"></i> Under Review <span class="snbadge warn">5</span></div>
+          <div class="sni" onclick="filterNavStatus('Draft','sop',this)"><i class="ti ti-pencil"></i> Drafts</div>
+          <div class="sni" onclick="filterNavStatus('Archived','sop',this)"><i class="ti ti-archive"></i> Archived</div>
+        </div>
+        <div class="sb-div"></div>
+        <div class="sb-sec">
+          <div class="sb-lbl">Quick Actions</div>
+          <div class="sni" onclick="openNewSOP()"><i class="ti ti-plus"></i> New SOP</div>
+          <div class="sni" onclick="navTop('templates',null)"><i class="ti ti-template"></i> Browse Templates</div>
+        </div>
+      </div>
+      <div id="sb-ed" style="display:none">
+        <div class="sb-sec">
+          <div class="sb-lbl">Drawing Status</div>
+          <div class="sni active" onclick="filterNavStatus(null,'ed',this)"><i class="ti ti-layout-list"></i> All Drawings</div>
+          <div class="sni" onclick="filterNavStatus('Active','ed',this)"><i class="ti ti-circle-check"></i> Active</div>
+          <div class="sni" onclick="filterNavStatus('Under Review','ed',this)"><i class="ti ti-clock"></i> Under Review <span class="snbadge warn">3</span></div>
+          <div class="sni" onclick="filterNavStatus('Draft','ed',this)"><i class="ti ti-pencil"></i> Drafts</div>
+        </div>
+      </div>
+      <div id="sb-specs" style="display:none">
+        <div class="sb-sec">
+          <div class="sb-lbl">Library</div>
+          <div class="sni active" onclick="filterSpecLib('All',this)"><i class="ti ti-layout-list"></i> All Libraries</div>
+          <div class="sni" onclick="filterSpecLib('Industry Standards',this)"><i class="ti ti-certificate"></i> Industry Standards</div>
+          <div class="sni" onclick="filterSpecLib('Regulatory',this)"><i class="ti ti-gavel"></i> Regulatory</div>
+          <div class="sni" onclick="filterSpecLib('Internal Specs',this)"><i class="ti ti-building-factory"></i> Internal Specs</div>
+          <div class="sni" onclick="filterSpecLib('Vendor Docs',this)"><i class="ti ti-truck"></i> Vendor Docs</div>
+          <div class="sni" onclick="filterSpecLib('Quality Standards',this)"><i class="ti ti-rosette"></i> Quality Standards</div>
+        </div>
+        <div class="sb-div"></div>
+        <div class="sb-sec"><div class="sni" onclick="openSpecModal()"><i class="ti ti-plus"></i> Add Specification</div></div>
+      </div>
+      <div id="sb-tmpl" style="display:none">
+        <div class="sb-sec">
+          <div class="sb-lbl">Status</div>
+          <div class="sni active" onclick="filterTmpl('All',this)"><i class="ti ti-layout-list"></i> All Active</div>
+          <div class="sni" onclick="filterTmpl('Retired',this)"><i class="ti ti-archive"></i> Retired <span class="snbadge d" id="sb-retired-ct" style="display:none">0</span></div>
+          <div class="sni" onclick="filterTmpl('History',this)"><i class="ti ti-versions"></i> Revision History</div>
+        </div>
+        <div class="sb-div"></div>
+        <div class="sb-sec">
+          <div class="sb-lbl">Category</div>
+          <div class="sni" onclick="filterTmpl('cat:Safety',this)"><i class="ti ti-shield"></i> Safety</div>
+          <div class="sni" onclick="filterTmpl('cat:Quality',this)"><i class="ti ti-rosette"></i> Quality</div>
+          <div class="sni" onclick="filterTmpl('cat:Maintenance',this)"><i class="ti ti-tool"></i> Maintenance</div>
+          <div class="sni" onclick="filterTmpl('cat:Operations',this)"><i class="ti ti-settings-cog"></i> Operations</div>
+        </div>
+        <div class="sb-div"></div>
+        <div class="sb-sec"><div class="sni" onclick="openTmplModal()"><i class="ti ti-plus"></i> New Template</div></div>
+      </div>
+      <div id="sb-qa" style="display:none">
+        <div class="sb-sec">
+          <div class="sb-lbl">Quality Alerts</div>
+          <div class="sni qa-item active" onclick="filterAlert('All','qa',this)"><i class="ti ti-layout-list"></i> All</div>
+          <div class="sni qa-item" onclick="filterAlert('Open','qa',this)"><i class="ti ti-alert-circle"></i> Open</div>
+          <div class="sni qa-item" onclick="filterAlert('Monitoring','qa',this)"><i class="ti ti-eye"></i> Monitoring</div>
+          <div class="sni qa-item" onclick="filterAlert('Closed','qa',this)"><i class="ti ti-circle-check"></i> Closed</div>
+        </div>
+        <div class="sb-div"></div>
+        <div class="sb-sec"><div class="sni qa-item" onclick="navTop('qa-new',null)"><i class="ti ti-plus"></i> New Quality Alert</div></div>
+      </div>
+      <div id="sb-sa" style="display:none">
+        <div class="sb-sec">
+          <div class="sb-lbl">Safety Alerts</div>
+          <div class="sni sa-item active" onclick="filterAlert('All','sa',this)"><i class="ti ti-layout-list"></i> All</div>
+          <div class="sni sa-item" onclick="filterAlert('Open','sa',this)"><i class="ti ti-alert-triangle"></i> Open</div>
+          <div class="sni sa-item" onclick="filterAlert('Monitoring','sa',this)"><i class="ti ti-eye"></i> Monitoring</div>
+          <div class="sni sa-item" onclick="filterAlert('Closed','sa',this)"><i class="ti ti-circle-check"></i> Closed</div>
+        </div>
+        <div class="sb-div"></div>
+        <div class="sb-sec"><div class="sni sa-item" onclick="navTop('sa-new',null)"><i class="ti ti-plus"></i> New Safety Alert</div></div>
+      </div>
+      <div id="sb-other" style="display:none">
+        <div class="sb-sec">
+          <div class="sb-lbl">Navigation</div>
+          <div class="sni" onclick="navTop('sop-lib',null)"><i class="ti ti-arrow-left"></i> Back to SOPs</div>
+        </div>
+      </div>
+      <div id="sb-training" style="display:none">
+        <div class="sb-sec">
+          <div class="sb-lbl">Training Packages</div>
+          <div class="sni tr-item active" onclick="filterTraining('All',this)"><i class="ti ti-layout-list"></i> All Packages</div>
+          <div class="sni tr-item" onclick="filterTraining('Draft',this)"><i class="ti ti-pencil"></i> Drafts</div>
+          <div class="sni tr-item" onclick="filterTraining('Active',this)"><i class="ti ti-circle-check"></i> Active</div>
+          <div class="sni tr-item" onclick="filterTraining('Archived',this)"><i class="ti ti-archive"></i> Archived</div>
+        </div>
+        <div class="sb-div"></div>
+        <div class="sb-sec">
+          <div class="sb-lbl">By Plan Category</div>
+          <div class="sni tr-item" onclick="filterTraining('plan:Safety',this)"><i class="ti ti-shield"></i> Safety Plans</div>
+          <div class="sni tr-item" onclick="filterTraining('plan:Quality',this)"><i class="ti ti-rosette"></i> Quality Plans</div>
+          <div class="sni tr-item" onclick="filterTraining('plan:Maintenance',this)"><i class="ti ti-tool"></i> Maintenance Plans</div>
+          <div class="sni tr-item" onclick="filterTraining('plan:Onboarding',this)"><i class="ti ti-user-check"></i> Onboarding Plans</div>
+        </div>
+        <div class="sb-div"></div>
+        <div class="sb-sec">
+          <div class="sni tr-item" onclick="openNewPackage()"><i class="ti ti-plus"></i> New Package</div>
+        </div>
+      </div>
+      <div class="sb-foot">
+        <div style="font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Mon Jun 8, 2026</div>
+        <div style="font-size:10px;color:var(--cp-navy);margin-bottom:3px">Approvals: <strong style="color:var(--cp-red)" id="sb-pending">6</strong></div>
+        <div style="font-size:10px;color:var(--cp-navy);margin-bottom:3px">Open QA: <strong style="color:var(--qa-color)" id="sb-qa-open">3</strong></div>
+        <div style="font-size:10px;color:var(--cp-navy)">Open SA: <strong style="color:var(--sa-color)" id="sb-sa-open">2</strong></div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="toolbar">
+        <div class="sw"><i class="ti ti-search"></i><input type="text" id="search-input" placeholder="Search by ID, title, tag, standard&hellip;" oninput="handleSearch(this.value)"></div>
+        <button class="btn" id="spec-btn" style="display:none" onclick="openSpecModal()"><i class="ti ti-books"></i> Add Spec</button>
+        <button class="btn" id="tmpl-btn" style="display:none" onclick="openTmplModal()"><i class="ti ti-template"></i> New Template</button>
+        <button class="btn pri" id="new-btn" onclick="openNewModal()"><i class="ti ti-plus"></i> <span id="new-btn-lbl">New SOP</span></button>
+      </div>
+      <div class="content">
+        <!-- SOP LIBRARY -->
+        <div class="view active" id="view-sop-lib">
+          <div class="sg">
+            <div class="sc"><div class="sl">Total SOPs</div><div class="sv" id="stat-sop-tot">10</div><div class="ss">6 departments</div></div>
+            <div class="sc"><div class="sl">Active</div><div class="sv" style="color:var(--cp-green)">6</div><div class="ss">in production</div></div>
+            <div class="sc"><div class="sl">Under Review</div><div class="sv" style="color:var(--cp-amber)">3</div><div class="ss">pending approval</div></div>
+            <div class="sc"><div class="sl">With Media</div><div class="sv" style="color:var(--cp-blue-active)" id="stat-sop-media">4</div><div class="ss">photos / videos</div></div>
+          </div>
+          <div class="fr" id="sop-chips">
+            <button class="chip active" onclick="filterTag('All',this,'sop')">All</button>
+            <button class="chip" onclick="filterTag('Safety',this,'sop')">Safety</button>
+            <button class="chip" onclick="filterTag('Quality',this,'sop')">Quality</button>
+            <button class="chip" onclick="filterTag('Maintenance',this,'sop')">Maint.</button>
+            <button class="chip" onclick="filterTag('Logistics',this,'sop')">Logistics</button>
+            <button class="chip" onclick="filterTag('Environmental',this,'sop')">Env.</button>
+            <button class="chip" onclick="filterTag('HR',this,'sop')">HR</button>
+          </div>
+          <table class="tbl">
+            <thead><tr>
+              <th style="width:70px">ID</th><th>Title</th>
+              <th style="width:46px">Ver.</th><th style="width:88px">Status</th>
+              <th style="width:66px">Tag</th><th style="width:56px">Media</th>
+              <th style="width:54px">Specs</th><th style="width:90px">Owner</th>
+            </tr></thead>
+            <tbody id="sop-tbody"></tbody>
+          </table>
+        </div>
+        <!-- DRAWING LIBRARY -->
+        <div class="view" id="view-ed-lib">
+          <div class="sg">
+            <div class="sc"><div class="sl">Total Drawings</div><div class="sv">8</div><div class="ss">3 disciplines</div></div>
+            <div class="sc"><div class="sl">Active</div><div class="sv" style="color:var(--cp-green)">4</div><div class="ss">released</div></div>
+            <div class="sc"><div class="sl">Under Review</div><div class="sv" style="color:var(--cp-amber)">3</div><div class="ss">pending</div></div>
+            <div class="sc"><div class="sl">Drafts</div><div class="sv" style="color:var(--cp-gray)">1</div><div class="ss">in progress</div></div>
+          </div>
+          <div class="fr" id="ed-chips">
+            <button class="chip active" onclick="filterTag('All',this,'ed')">All</button>
+            <button class="chip" onclick="filterTag('Mechanical',this,'ed')">Mechanical</button>
+            <button class="chip" onclick="filterTag('Electrical',this,'ed')">Electrical</button>
+            <button class="chip" onclick="filterTag('Civil',this,'ed')">Civil</button>
+            <button class="chip" onclick="filterTag('P&ID',this,'ed')">P&amp;ID</button>
+            <button class="chip" onclick="filterTag('Layout',this,'ed')">Layout</button>
+          </div>
+          <table class="tbl">
+            <thead><tr>
+              <th style="width:80px">Drawing #</th><th>Title</th>
+              <th style="width:44px">Rev.</th><th style="width:88px">Status</th>
+              <th style="width:72px">Type</th><th style="width:54px">Specs</th>
+              <th style="width:90px">Discipline</th><th style="width:74px">Updated</th>
+            </tr></thead>
+            <tbody id="ed-tbody"></tbody>
+          </table>
+        </div>
+        <!-- SPECIFICATIONS -->
+        <div class="view" id="view-specs">
+          <div class="sect-hdr">
+            <span class="sect-title">Reference Specifications</span>
+            <button class="btn pri" onclick="openSpecModal()"><i class="ti ti-plus"></i> Add Specification</button>
+          </div>
+          <div id="specs-list"></div>
+        </div>
+        <!-- TEMPLATES -->
+        <div class="view" id="view-templates">
+          <div id="templates-content"></div>
+        </div>
+        <!-- QUALITY ALERT LIBRARY -->
+        <div class="view" id="view-qa-lib">
+          <div class="sg">
+            <div class="sc qa-card"><div class="sl">Total QA</div><div class="sv" id="stat-qa-tot">5</div><div class="ss">quality alerts</div></div>
+            <div class="sc qa-card"><div class="sl">Open</div><div class="sv" style="color:var(--qa-color)" id="stat-qa-open">3</div><div class="ss">action required</div></div>
+            <div class="sc qa-card"><div class="sl">Monitoring</div><div class="sv" style="color:var(--cp-amber)" id="stat-qa-mon">1</div><div class="ss">under watch</div></div>
+            <div class="sc qa-card"><div class="sl">Closed</div><div class="sv" style="color:var(--cp-gray)" id="stat-qa-cls">1</div><div class="ss">resolved</div></div>
+          </div>
+          <div class="fr" id="qa-chips">
+            <button class="chip qa-chip active" onclick="filterAlert('All','qa',this)">All</button>
+            <button class="chip qa-chip" onclick="filterAlert('Open','qa',this)">Open</button>
+            <button class="chip qa-chip" onclick="filterAlert('Monitoring','qa',this)">Monitoring</button>
+            <button class="chip qa-chip" onclick="filterAlert('Closed','qa',this)">Closed</button>
+          </div>
+          <div id="qa-list"></div>
+        </div>
+        <!-- SAFETY ALERT LIBRARY -->
+        <div class="view" id="view-sa-lib">
+          <div class="sg">
+            <div class="sc sa-card"><div class="sl">Total SA</div><div class="sv" id="stat-sa-tot">4</div><div class="ss">safety alerts</div></div>
+            <div class="sc sa-card"><div class="sl">Open</div><div class="sv" style="color:var(--sa-color)" id="stat-sa-open">2</div><div class="ss">immediate action</div></div>
+            <div class="sc sa-card"><div class="sl">Monitoring</div><div class="sv" style="color:var(--cp-amber)" id="stat-sa-mon">1</div><div class="ss">under watch</div></div>
+            <div class="sc sa-card"><div class="sl">Closed</div><div class="sv" style="color:var(--cp-gray)" id="stat-sa-cls">1</div><div class="ss">resolved</div></div>
+          </div>
+          <div class="fr" id="sa-chips">
+            <button class="chip sa-chip active" onclick="filterAlert('All','sa',this)">All</button>
+            <button class="chip sa-chip" onclick="filterAlert('Open','sa',this)">Open</button>
+            <button class="chip sa-chip" onclick="filterAlert('Monitoring','sa',this)">Monitoring</button>
+            <button class="chip sa-chip" onclick="filterAlert('Closed','sa',this)">Closed</button>
+          </div>
+          <div id="sa-list"></div>
+        </div>
+        <!-- NEW QUALITY ALERT FORM -->
+        <div class="view" id="view-qa-new">
+          <div class="sect-hdr" style="margin-bottom:16px">
+            <span class="sect-title" style="color:var(--qa-color)"><i class="ti ti-checkbox" style="margin-right:7px"></i>New Quality Alert</span>
+            <span style="font-size:10px;color:var(--cp-gray)">Standard QA Template &mdash; fields marked * are required</span>
+          </div>
+          <div id="qa-form-content"></div>
+        </div>
+        <!-- NEW SAFETY ALERT FORM -->
+        <div class="view" id="view-sa-new">
+          <div class="sect-hdr" style="margin-bottom:16px">
+            <span class="sect-title" style="color:var(--sa-color)"><i class="ti ti-alert-triangle" style="margin-right:7px"></i>New Safety Alert</span>
+            <span style="font-size:10px;color:var(--cp-gray)">Standard SA Template &mdash; fields marked * are required</span>
+          </div>
+          <div id="sa-form-content"></div>
+        </div>
+        <!-- APPROVALS -->
+        <div class="view" id="view-approvals">
+          <div class="type-tab">
+            <div class="tt active" onclick="switchApprTab('sop',this)"><i class="ti ti-file-description" style="font-size:12px;margin-right:4px"></i>SOPs <span id="at-sop-ct" style="font-size:9px"></span></div>
+            <div class="tt" onclick="switchApprTab('ed',this)"><i class="ti ti-blueprint" style="font-size:12px;margin-right:4px"></i>Drawings <span id="at-ed-ct" style="font-size:9px"></span></div>
+          </div>
+          <div id="appr-content"></div>
+        </div>
+        <!-- VERSION HISTORY -->
+        <div class="view" id="view-versions">
+          <div class="sect-hdr">
+            <span class="sect-title">Change History</span>
+            <div style="display:flex;gap:9px;align-items:center">
+              <select style="font-size:11px;padding:5px 9px;border:1px solid var(--cp-border);border-radius:3px;background:var(--cp-bg);color:var(--cp-navy)" onchange="switchVerType(this.value)" id="ver-type-sel">
+                <option value="sop">SOPs</option><option value="ed">Drawings</option>
+              </select>
+              <select style="font-size:11px;padding:5px 9px;border:1px solid var(--cp-border);border-radius:3px;background:var(--cp-bg);color:var(--cp-navy)" onchange="loadVersions(this.value)" id="doc-sel"></select>
+            </div>
+          </div>
+          <div class="panel" id="version-timeline"></div>
+        </div>
+        <!-- WORKFLOWS -->
+        <div class="view" id="view-wf-config">
+          <div class="sect-hdr">
+            <span class="sect-title">Approval Workflow Configuration</span>
+            <button class="btn pri" onclick="openWFModal()"><i class="ti ti-plus"></i> New Workflow</button>
+          </div>
+          <div class="type-tab">
+            <div class="tt active" onclick="switchWFTab('all',this)">All</div>
+            <div class="tt" onclick="switchWFTab('sop',this)">SOPs</div>
+            <div class="tt" onclick="switchWFTab('ed',this)">Drawings</div>
+          </div>
+          <div id="wf-list"></div>
+        </div>
+        <!-- ROLES -->
+        <div class="view" id="view-roles">
+          <div class="sect-hdr">
+            <span class="sect-title">Access &amp; Roles</span>
+            <button class="btn" onclick="showToast('Invitation sent')"><i class="ti ti-user-plus"></i> Invite Member</button>
+          </div>
+          <div class="panel"><div class="pt">Team Members</div><div id="roles-list"></div></div>
+        </div>
+        <!-- TRAINING PACKAGES -->
+        <div class="view" id="view-training">
+          <div id="training-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW SOP MODAL -->
+<div class="modal-bg" id="modal-new" onclick="closeMBg(event,'modal-new')">
+  <div class="modal wide">
+    <h2 id="modal-new-title"><i class="ti ti-file-plus" style="margin-right:6px"></i>Create New SOP</h2>
+    <div class="rp">
+      <div class="fg"><label>SOP ID</label><input type="text" id="f-id" placeholder="e.g. SOP-025"></div>
+      <div class="fg"><label>Version</label><input type="text" id="f-ver" value="1.0.0"></div>
+    </div>
+    <div class="fg"><label>Use Template (optional)</label>
+      <select id="f-tmpl" onchange="applyTemplate(this.value)"><option value="">-- Start from scratch --</option></select>
+    </div>
+    <div class="fg"><label>Title *</label><input type="text" id="f-title" placeholder="Document title"></div>
+    <div class="fg"><label>Description / Scope</label><textarea id="f-desc" style="height:52px" placeholder="Scope and purpose&hellip;"></textarea></div>
+    <div class="rp">
+      <div class="fg"><label>Owner / Department</label><input type="text" id="f-owner" placeholder="Plant Safety"></div>
+      <div class="fg"><label>Category Tag</label>
+        <select id="f-tag"><option>Safety</option><option>Quality</option><option>Maintenance</option><option>Logistics</option><option>Environmental</option><option>HR</option></select>
+      </div>
+    </div>
+    <div class="rp">
+      <div class="fg"><label>Status</label><select id="f-status"><option>Draft</option><option>Under Review</option><option>Active</option></select></div>
+      <div class="fg"><label>Approval Workflow</label><select id="f-wf"><option value="">None (manual)</option></select></div>
+    </div>
+    <div class="section-divider"><i class="ti ti-photo-video" style="margin-right:5px"></i>Photos &amp; Videos</div>
+    <div style="font-size:10px;color:var(--cp-gray);margin-bottom:7px">Attach visual work instructions. Photos (.jpg/.png) and videos (.mp4/.mov) are both supported.</div>
+    <div class="file-drop" onclick="document.getElementById('media-input').click()">
+      <i class="ti ti-cloud-upload" style="font-size:20px;display:block;margin-bottom:4px"></i>
+      Click to upload photos or videos &mdash; or drag &amp; drop here<br>
+      <span style="font-size:10px">JPG, PNG, MP4, MOV &middot; Max 50 MB per file</span>
+    </div>
+    <input type="file" id="media-input" style="display:none" multiple accept="image/*,video/*" onchange="handleMedia(this)">
+    <div class="media-row" id="media-preview"></div>
+    <div class="section-divider"><i class="ti ti-paperclip" style="margin-right:5px"></i>Reference Specifications</div>
+    <div id="spec-link-list" style="margin-bottom:8px"></div>
+    <button class="btn" onclick="toggleSpecPicker()" style="margin-bottom:4px"><i class="ti ti-books"></i> Link from Spec Library</button>
+    <div id="spec-picker" style="display:none;border:1px solid var(--cp-border);border-radius:3px;padding:10px;background:var(--cp-bg);margin-top:6px;max-height:130px;overflow-y:auto">
+      <div id="spec-picker-items"></div>
+    </div>
+    <div class="mf">
+      <button class="btn" onclick="closeMBg({target:document.getElementById('modal-new')},'modal-new')">Cancel</button>
+      <button class="btn pri" onclick="createDoc()"><i class="ti ti-check"></i> Create SOP</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPEC MODAL -->
+<div class="modal-bg" id="modal-spec" onclick="closeMBg(event,'modal-spec')">
+  <div class="modal wide">
+    <h2><i class="ti ti-books" style="margin-right:6px"></i>Add Reference Specification</h2>
+    <div class="rp">
+      <div class="fg"><label>Document ID / Standard #</label><input type="text" id="sp-id" placeholder="e.g. ISO-9001:2015"></div>
+      <div class="fg"><label>Revision / Edition</label><input type="text" id="sp-rev" placeholder="e.g. 2015"></div>
+    </div>
+    <div class="fg"><label>Title *</label><input type="text" id="sp-title" placeholder="Full document title"></div>
+    <div class="fg"><label>Issuing Body / Source</label><input type="text" id="sp-body" placeholder="e.g. ISO, OSHA, ASME, Internal"></div>
+    <div class="fg"><label>Description / Applicability</label><textarea id="sp-desc" style="height:52px" placeholder="Scope and when it applies&hellip;"></textarea></div>
+    <div class="section-divider">Add to Libraries (select one or more)</div>
+    <div id="lib-check-list" style="margin-bottom:10px"></div>
+    <div class="mf">
+      <button class="btn" onclick="closeMBg({target:document.getElementById('modal-spec')},'modal-spec')">Cancel</button>
+      <button class="btn pri" onclick="saveSpec()"><i class="ti ti-check"></i> Add to Library</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATE MODAL -->
+<div class="modal-bg" id="modal-tmpl" onclick="closeMBg(event,'modal-tmpl')">
+  <div class="modal wide">
+    <h2 id="tmpl-modal-title"><i class="ti ti-template" style="margin-right:6px"></i>Create SOP Template</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="fg" style="grid-column:span 2"><label>Template Name *</label><input type="text" id="tm-name" placeholder="e.g. Safety Hazard Control SOP"></div>
+      <div class="fg"><label>Version</label><input type="text" id="tm-ver" value="1.0" placeholder="e.g. 1.0"></div>
+    </div>
+    <div class="rp">
+      <div class="fg"><label>Category</label>
+        <select id="tm-cat"><option>Safety</option><option>Quality</option><option>Maintenance</option><option>Operations</option><option>HR</option><option>Environmental</option></select>
+      </div>
+      <div class="fg"><label>Default Tag</label>
+        <select id="tm-tag"><option>Safety</option><option>Quality</option><option>Maintenance</option><option>Logistics</option><option>Environmental</option><option>HR</option></select>
+      </div>
+    </div>
+    <div class="fg"><label>Description</label><textarea id="tm-desc" style="height:48px" placeholder="What this template is for&hellip;"></textarea></div>
+
+    <!-- REVISION REASON — shown on edit, mandatory -->
+    <div id="tm-reason-block" style="display:none;background:#FFF8E1;border:1px solid #FFD54F;border-left:3px solid #F9A825;border-radius:3px;padding:10px;margin-bottom:10px">
+      <div style="font-size:10px;font-weight:700;color:#7B4F00;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px"><i class="ti ti-alert-circle" style="margin-right:4px"></i>Revision Change Reason — Required *</div>
+      <div class="fg" style="margin-bottom:0"><label>Reason for this revision *</label>
+        <select id="tm-reason-type" onchange="toggleReasonDetail(this.value)" style="margin-bottom:7px">
+          <option value="">— Select a reason (mandatory) —</option>
+          <option value="Regulatory Update">Regulatory Update — compliance change required</option>
+          <option value="Process Change">Process Change — underlying process has changed</option>
+          <option value="Error Correction">Error Correction — fixing an error in previous version</option>
+          <option value="Periodic Review">Periodic Review — scheduled review cycle</option>
+          <option value="Audit Finding">Audit Finding — corrective action from audit</option>
+          <option value="Scope Expansion">Scope Expansion — adding new content/sections</option>
+          <option value="Other">Other — see notes below</option>
+        </select>
+        <textarea id="tm-reason-notes" style="height:48px" placeholder="Describe what changed and why (required)…"></textarea>
+      </div>
+      <div class="rp" style="margin-top:8px">
+        <div class="fg" style="margin-bottom:0"><label>Revised By</label><input type="text" id="tm-revised-by" placeholder="Name / role" value="Jamie Mercer"></div>
+        <div class="fg" style="margin-bottom:0"><label>Revision Date</label><input type="date" id="tm-rev-date" value="2026-06-08"></div>
+      </div>
+    </div>
+
+    <div class="section-divider">Standard Sections</div>
+    <div id="tmpl-sections-list" style="margin-bottom:6px"></div>
+    <button class="add-step-btn" onclick="addTmplSection()"><i class="ti ti-plus"></i> Add Section</button>
+    <div class="section-divider">Default Reference Specifications</div>
+    <div id="tmpl-spec-picker" style="border:1px solid var(--cp-border);border-radius:3px;padding:9px;background:var(--cp-bg);max-height:120px;overflow-y:auto;margin-top:6px"></div>
+    <div class="fg" style="margin-top:10px"><label>Default Workflow</label>
+      <select id="tm-wf"><option value="">None (manual)</option></select>
+    </div>
+    <div class="mf">
+      <button class="btn" onclick="closeMBg({target:document.getElementById('modal-tmpl')},'modal-tmpl')">Cancel</button>
+      <button class="btn pri" id="tm-save-btn" onclick="saveTemplate()"><i class="ti ti-check"></i> Save Template</button>
+    </div>
+  </div>
+</div>
+
+<!-- RETIRE CONFIRMATION MODAL -->
+<div class="modal-bg" id="modal-retire" onclick="closeMBg(event,'modal-retire')">
+  <div class="modal" style="border-top-color:#C8922A;width:460px">
+    <h2 style="color:#7B4F00"><i class="ti ti-archive" style="margin-right:6px;color:#C8922A"></i>Retire Template to History</h2>
+    <div style="background:#FFF8E1;border:1px solid #FFD54F;border-radius:3px;padding:10px;margin-bottom:12px;font-size:11px;color:#7B4F00">
+      <i class="ti ti-info-circle" style="margin-right:5px"></i>
+      Retiring removes this template from the active library and archives it in Revision History. It <strong>cannot be used to create new SOPs</strong> once retired, but the full record is preserved. This action cannot be undone by a non-admin.
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--cp-navy);margin-bottom:12px" id="retire-tmpl-name"></div>
+    <div class="fg"><label>Reason for Retiring * (mandatory)</label>
+      <select id="retire-reason" onchange="checkRetireReady()">
+        <option value="">— Select a reason (required) —</option>
+        <option value="Superseded">Superseded by a newer version</option>
+        <option value="Process Eliminated">Underlying process has been eliminated</option>
+        <option value="Regulatory Change">Regulation no longer applicable</option>
+        <option value="Consolidated">Consolidated into another template</option>
+        <option value="Admin Decision">Administrative decision</option>
+      </select>
+    </div>
+    <div class="fg"><label>Retirement Notes * (mandatory)</label>
+      <textarea id="retire-notes" style="height:60px" placeholder="Describe why this template is being retired and any relevant context…" oninput="checkRetireReady()"></textarea>
+    </div>
+    <div class="fg"><label>Retired By</label>
+      <input type="text" id="retire-by" value="Jamie Mercer — Admin">
+    </div>
+    <div id="retire-error" style="display:none;color:var(--cp-red);font-size:10px;font-weight:600;margin-bottom:8px"><i class="ti ti-alert-circle"></i> Both a reason and notes are required to retire a template.</div>
+    <div class="mf">
+      <button class="btn" onclick="closeMBg({target:document.getElementById('modal-retire')},'modal-retire')">Cancel</button>
+      <button class="btn" id="retire-confirm-btn" style="background:#C8922A;border-color:#C8922A;color:#fff;opacity:.4;cursor:not-allowed" onclick="confirmRetire()" disabled>
+        <i class="ti ti-archive"></i> Confirm Retirement
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- WORKFLOW MODAL -->
+<div class="modal-bg" id="modal-wf" onclick="closeMBg(event,'modal-wf')">
+  <div class="modal">
+    <h2><i class="ti ti-settings-2" style="margin-right:6px"></i>Configure Approval Workflow</h2>
+    <div class="rp">
+      <div class="fg"><label>Workflow Name *</label><input type="text" id="wf-name" placeholder="e.g. Safety SOP Approval"></div>
+      <div class="fg"><label>Applies To</label>
+        <select id="wf-applies"><option value="sop">SOPs only</option><option value="ed">Drawings only</option><option value="both">Both SOPs &amp; Drawings</option></select>
+      </div>
+    </div>
+    <div class="fg"><label>Minimum Approvers</label><select id="wf-min"><option>1</option><option>2</option><option>3</option></select></div>
+    <div style="font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px">Approval Steps</div>
+    <div id="wf-steps-list"></div>
+    <button class="add-step-btn" onclick="addWFStep()"><i class="ti ti-plus"></i> Add Step</button>
+    <div class="rp" style="margin-top:10px">
+      <div class="fg"><label>Auto-Escalate After</label>
+        <select id="wf-esc"><option value="0">Disabled</option><option value="3">3 days</option><option value="5">5 days</option><option value="7">7 days</option><option value="14">14 days</option></select>
+      </div>
+      <div class="fg"><label>Rejection Notification</label>
+        <select id="wf-rej"><option>Author only</option><option>Author + Department head</option><option>Full team</option></select>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn" onclick="closeMBg({target:document.getElementById('modal-wf')},'modal-wf')">Cancel</button>
+      <button class="btn pri" onclick="saveWorkflow()"><i class="ti ti-check"></i> Save Workflow</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toast-msg"></span></div>
+
+<script>
+const LIBS=['Industry Standards','Regulatory','Internal Specs','Vendor Docs','Quality Standards'];
+const specs=[
+  {id:'ISO-9001:2015',title:'Quality Management Systems Requirements',body:'ISO',rev:'2015',desc:'Requirements for a quality management system.',libs:['Quality Standards','Industry Standards']},
+  {id:'OSHA-1910.119',title:'Process Safety Management of Highly Hazardous Chemicals',body:'OSHA',rev:'2019',desc:'PSM standard for hazardous chemical processes.',libs:['Regulatory','Industry Standards']},
+  {id:'OSHA-1910.178',title:'Powered Industrial Trucks',body:'OSHA',rev:'2018',desc:'Safety regulations for forklift operations.',libs:['Regulatory']},
+  {id:'NFPA-10',title:'Standard for Portable Fire Extinguishers',body:'NFPA',rev:'2022',desc:'Fire extinguisher installation and maintenance.',libs:['Regulatory','Industry Standards']},
+  {id:'ISO-14001:2015',title:'Environmental Management Systems',body:'ISO',rev:'2015',desc:'Environmental management requirements.',libs:['Industry Standards','Quality Standards']},
+  {id:'ASME-B31.3',title:'Process Piping Code',body:'ASME',rev:'2022',desc:'Design and construction of process piping.',libs:['Industry Standards']},
+  {id:'EPA-40-CFR-264',title:'Standards for Owners of Hazardous Waste',body:'EPA',rev:'2023',desc:'Hazardous waste regulatory requirements.',libs:['Regulatory']},
+  {id:'INT-QA-001',title:'Internal Quality Control Procedure',body:'Spectrum Killian',rev:'Rev D',desc:'Internal QC framework for production.',libs:['Internal Specs','Quality Standards']},
+  {id:'INT-EHS-002',title:'Environmental Health & Safety Standards',body:'Spectrum Killian',rev:'Rev B',desc:'Internal EHS standards.',libs:['Internal Specs','Regulatory']},
+  {id:'VND-SKF-001',title:'SKF Bearing Installation Manual',body:'SKF Group',rev:'2021',desc:'OEM installation specs for SKF bearings.',libs:['Vendor Docs']},
+  {id:'VND-ABB-MCC',title:'ABB MCC Installation & Commissioning Guide',body:'ABB',rev:'Rev 3',desc:'Commissioning requirements for ABB MCCs.',libs:['Vendor Docs']},
+  {id:'ISO-45001:2018',title:'Occupational Health & Safety Management',body:'ISO',rev:'2018',desc:'OH&S management system requirements.',libs:['Industry Standards','Quality Standards']},
+];
+let templates=[
+  {id:'TMPL-001',name:'Safety Hazard Control SOP',cat:'Safety',desc:'Template for hazard identification, risk assessment and control measures.',tag:'Safety',ver:'2.1',status:'Active',createdBy:'J. Mercer',createdDate:'2024-03-10',lastModified:'2026-02-14',lastModifiedBy:'J. Mercer',sections:['1. Purpose & Scope','2. Definitions','3. Responsibilities','4. Hazard Identification','5. Risk Assessment','6. Control Measures','7. PPE Requirements','8. Emergency Procedures','9. Training Requirements','10. Document Control'],defaultSpecs:['OSHA-1910.119','ISO-45001:2018'],wf:'Safety Document Approval',history:[{ver:'2.1',date:'2026-02-14',by:'J. Mercer',reason:'Regulatory Update',notes:'Updated to align with revised ISO 45001:2018 audit requirements. Section 5 risk matrix expanded.',isCurrent:true},{ver:'2.0',date:'2025-09-01',by:'M. Reyes',reason:'Scope Expansion',notes:'Added Section 9 Training Requirements and 10 Document Control. Major structural overhaul.',isCurrent:false},{ver:'1.2',date:'2025-01-15',by:'J. Mercer',reason:'Error Correction',notes:'Fixed incorrect PPE classification table in Section 7.',isCurrent:false},{ver:'1.0',date:'2024-03-10',by:'J. Mercer',reason:'Initial Release',notes:'Initial template created for plant safety onboarding program.',isCurrent:false}]},
+  {id:'TMPL-002',name:'Equipment Maintenance SOP',cat:'Maintenance',desc:'Template for preventive and corrective maintenance procedures.',tag:'Maintenance',ver:'1.3',status:'Active',createdBy:'D. Okonkwo',createdDate:'2024-06-20',lastModified:'2025-11-08',lastModifiedBy:'D. Okonkwo',sections:['1. Purpose & Scope','2. Equipment Description','3. Maintenance Schedule','4. Pre-Maintenance Checks','5. LOTO Procedure','6. Step-by-Step Instructions','7. Post-Maintenance Testing','8. Records'],defaultSpecs:['OSHA-1910.178'],wf:'Standard SOP Review',history:[{ver:'1.3',date:'2025-11-08',by:'D. Okonkwo',reason:'Audit Finding',notes:'Added LOTO dual sign-off requirement following audit NC-2025-14.',isCurrent:true},{ver:'1.2',date:'2025-04-22',by:'D. Okonkwo',reason:'Process Change',notes:'Updated pre-maintenance checklist after equipment PP-44 installation.',isCurrent:false},{ver:'1.0',date:'2024-06-20',by:'D. Okonkwo',reason:'Initial Release',notes:'Initial release for maintenance department.',isCurrent:false}]},
+  {id:'TMPL-003',name:'Quality Inspection SOP',cat:'Quality',desc:'Template for product and process quality inspection.',tag:'Quality',ver:'1.1',status:'Active',createdBy:'Chen W.',createdDate:'2024-08-05',lastModified:'2025-06-30',lastModifiedBy:'Chen W.',sections:['1. Purpose & Scope','2. Applicable Standards','3. Inspection Equipment','4. Sampling Plan','5. Inspection Criteria','6. Accept / Reject Criteria','7. Non-Conformance Handling','8. Records & Reporting'],defaultSpecs:['ISO-9001:2015','INT-QA-001'],wf:'Standard SOP Review',history:[{ver:'1.1',date:'2025-06-30',by:'Chen W.',reason:'Periodic Review',notes:'Revised sampling plan per updated ISO 9001 guidance. Accept/reject criteria clarified.',isCurrent:true},{ver:'1.0',date:'2024-08-05',by:'Chen W.',reason:'Initial Release',notes:'Initial template created for QA department onboarding.',isCurrent:false}]},
+  {id:'TMPL-004',name:'Chemical Handling & Storage SOP',cat:'Safety',desc:'Template for safe handling, storage and disposal of hazardous chemicals.',tag:'Safety',ver:'3.0',status:'Active',createdBy:'M. Reyes',createdDate:'2023-11-01',lastModified:'2026-01-20',lastModifiedBy:'M. Reyes',sections:['1. Purpose & Scope','2. Chemical Inventory','3. SDS Requirements','4. PPE Requirements','5. Handling Procedures','6. Storage Requirements','7. Spill Response','8. Disposal Procedures','9. Emergency Contacts'],defaultSpecs:['OSHA-1910.119','EPA-40-CFR-264'],wf:'Safety Document Approval',history:[{ver:'3.0',date:'2026-01-20',by:'M. Reyes',reason:'Regulatory Update',notes:'Full revision for EPA 40 CFR 264 compliance. Emergency contacts section added.',isCurrent:true},{ver:'2.1',date:'2025-03-10',by:'M. Reyes',reason:'Process Change',notes:'Updated storage compatibility chart after new chemical inventory added.',isCurrent:false},{ver:'2.0',date:'2024-07-15',by:'J. Mercer',reason:'Scope Expansion',notes:'Added Disposal Procedures section. Spill response expanded significantly.',isCurrent:false},{ver:'1.0',date:'2023-11-01',by:'M. Reyes',reason:'Initial Release',notes:'Initial template created.',isCurrent:false}]},
+];
+let retiredTemplates=[
+  {id:'TMPL-R001',name:'Forklift Pre-Shift Inspection (Legacy)',cat:'Safety',desc:'Legacy template superseded by SOP-004 integration.',tag:'Safety',ver:'1.4',status:'Retired',createdBy:'J. Mercer',createdDate:'2023-01-10',retiredDate:'2025-08-01',retiredBy:'Jamie Mercer — Admin',retireReason:'Superseded',retireNotes:'Superseded by updated SOP-004 which incorporates all pre-shift inspection steps directly. Standalone template no longer needed.',history:[{ver:'1.4',date:'2025-01-10',by:'J. Mercer',reason:'Periodic Review',notes:'Minor wording updates.',isCurrent:false,isRetired:true},{ver:'1.0',date:'2023-01-10',by:'J. Mercer',reason:'Initial Release',notes:'Initial forklift inspection template.',isCurrent:false}]},
+];
+let sops=[
+  {id:'SOP-001',title:'Chemical Handling & Storage',desc:'Safe handling, storage and disposal of industrial chemicals.',ver:'3.2.1',status:'Active',tags:['Safety','Environmental'],owner:'Plant Safety',updated:'2026-05-12',specs:['OSHA-1910.119','EPA-40-CFR-264'],media:['chem-handling-overview.mp4','storage-layout.jpg']},
+  {id:'SOP-002',title:'Equipment Lockout/Tagout (LOTO)',desc:'LOTO procedures for machinery maintenance.',ver:'2.4.0',status:'Active',tags:['Safety','Maintenance'],owner:'Maintenance',updated:'2026-04-28',specs:['OSHA-1910.119'],media:['loto-steps.mp4']},
+  {id:'SOP-003',title:'Quality Inspection — Line A',desc:'Product quality inspection checklist for Assembly Line A.',ver:'1.9.2',status:'Under Review',tags:['Quality'],owner:'QA Team',updated:'2026-05-30',specs:['ISO-9001:2015'],media:['inspection-points.jpg','gauge-use.jpg']},
+  {id:'SOP-004',title:'Forklift Operation & Safety',desc:'Certification and operation standards for forklift operators.',ver:'4.0.1',status:'Active',tags:['Safety','Logistics'],owner:'Floor Supervisor',updated:'2026-03-15',specs:['OSHA-1910.178'],media:[]},
+  {id:'SOP-005',title:'Incoming Goods Inspection',desc:'Receiving and inspection process for all vendor deliveries.',ver:'2.1.0',status:'Under Review',tags:['Quality','Logistics'],owner:'Receiving',updated:'2026-05-28',specs:['ISO-9001:2015'],media:[]},
+  {id:'SOP-006',title:'Waste Water Treatment',desc:'Treating process waste water prior to discharge.',ver:'1.3.0',status:'Active',tags:['Environmental'],owner:'Environmental Eng.',updated:'2026-02-10',specs:['EPA-40-CFR-264','ISO-14001:2015'],media:[]},
+  {id:'SOP-007',title:'New Employee Onboarding',desc:'HR onboarding for new manufacturing floor employees.',ver:'2.0.0',status:'Draft',tags:['HR'],owner:'HR Dept.',updated:'2026-05-31',specs:[],media:[]},
+  {id:'SOP-008',title:'Preventive Maintenance Schedule',desc:'Monthly and quarterly PM schedules for production equipment.',ver:'3.1.0',status:'Active',tags:['Maintenance'],owner:'Maintenance',updated:'2026-04-05',specs:['ASME-B31.3','INT-EHS-002'],media:['pm-checklist-walkthrough.mp4']},
+  {id:'SOP-009',title:'Personal Protective Equipment',desc:'PPE requirements by work zone and task type.',ver:'1.6.0',status:'Active',tags:['Safety'],owner:'Plant Safety',updated:'2026-03-22',specs:['ISO-45001:2018'],media:[]},
+  {id:'SOP-010',title:'Fire Safety & Evacuation',desc:'Evacuation routes, muster points, fire suppression protocols.',ver:'2.2.0',status:'Under Review',tags:['Safety'],owner:'Plant Safety',updated:'2026-06-01',specs:['NFPA-10','OSHA-1910.119'],media:[]},
+];
+const drawings=[
+  {id:'DWG-M001',title:'Assembly Line A — General Arrangement',desc:'Overall layout of Assembly Line A machinery footprint.',ver:'B',status:'Active',tags:['Mechanical','Layout'],owner:'Mech. Eng.',updated:'2026-04-10',specs:[]},
+  {id:'DWG-M002',title:'Conveyor Drive Assembly Detail',desc:'Detail drawing for conveyor gearbox and drive shaft.',ver:'C',status:'Active',tags:['Mechanical'],owner:'Mech. Eng.',updated:'2026-03-18',specs:['ASME-B31.3']},
+  {id:'DWG-E001',title:'Motor Control Center — MCC-2',desc:'Electrical schematic for MCC-2 serving production floor.',ver:'A',status:'Under Review',tags:['Electrical'],owner:'Electrical Eng.',updated:'2026-06-01',specs:['VND-ABB-MCC']},
+  {id:'DWG-E002',title:'Plant Lighting Layout — Zone 3',desc:'Lighting circuit layout for Zone 3 expansion.',ver:'A',status:'Under Review',tags:['Electrical','Layout'],owner:'Electrical Eng.',updated:'2026-05-28',specs:[]},
+  {id:'DWG-P001',title:'Coolant Water P&ID — Loop 1',desc:'Process & instrumentation diagram for coolant loop 1.',ver:'D',status:'Active',tags:['P&ID'],owner:'Process Eng.',updated:'2026-02-14',specs:['ASME-B31.3']},
+  {id:'DWG-P002',title:'Compressed Air Distribution P&ID',desc:'Facility-wide compressed air distribution diagram.',ver:'B',status:'Under Review',tags:['P&ID'],owner:'Process Eng.',updated:'2026-05-25',specs:['ASME-B31.3']},
+  {id:'DWG-C001',title:'Equipment Foundation — Press PP-44',desc:'Civil foundation detail for hydraulic press PP-44.',ver:'A',status:'Active',tags:['Civil'],owner:'Civil Eng.',updated:'2026-01-20',specs:[]},
+  {id:'DWG-M003',title:'Pallet Racking Layout — Warehouse B',desc:'Draft layout for new racking configuration.',ver:'A',status:'Draft',tags:['Mechanical','Layout'],owner:'Mech. Eng.',updated:'2026-06-02',specs:[]},
+];
+let qualityAlerts=[
+  {id:'QA-2026-001',title:'Out-of-Tolerance Dimension — Line A Part #7712',type:'Dimensional Non-Conformance',priority:'Critical',status:'Open',area:'Assembly Line A',discovered:'2026-06-01',discoveredBy:'Chen W.',desc:'Multiple parts on Line A measuring 0.4mm over upper tolerance limit on bore diameter. Batch QA-7712-B affected.',rootCause:'Tool wear on CNC station 4 exceeding service interval.',immediateAction:'Batch quarantined. Line A halted pending tool inspection.',corrective:'Replace CNC tooling. Update PM schedule.',preventive:'Reduce tool inspection interval from 500 to 350 hrs.',linkedSOP:['SOP-003'],linkedSpec:['ISO-9001:2015','INT-QA-001'],media:[],attachments:[]},
+  {id:'QA-2026-002',title:'Surface Finish Defect — Coating Adhesion Failure',type:'Surface / Cosmetic Defect',priority:'High',status:'Open',area:'Finishing Dept.',discovered:'2026-05-28',discoveredBy:'Torres R.',desc:'Adhesion failure observed on 12% of parts from batch FN-882. Flaking occurring at 48hr cure mark.',rootCause:'Under investigation — suspected humidity variance in cure oven.',immediateAction:'Batch FN-882 on hold. Customer shipment delayed.',corrective:'Pending root cause confirmation.',preventive:'Pending.',linkedSOP:['SOP-003'],linkedSpec:['INT-QA-001'],media:[],attachments:[]},
+  {id:'QA-2026-003',title:'Incoming Material Cert Missing — Supplier SKF',type:'Supplier / Material Issue',priority:'Medium',status:'Open',area:'Receiving Dock',discovered:'2026-06-05',discoveredBy:'Mercer J.',desc:'Batch of SKF bearings received without material certification documentation. Quarantine applied.',rootCause:'Supplier documentation process error.',immediateAction:'Bearings quarantined at receiving dock.',corrective:'Contact SKF supplier for retroactive certs.',preventive:'Update PO to require certs with every shipment.',linkedSOP:['SOP-005'],linkedSpec:['VND-SKF-001','ISO-9001:2015'],media:[],attachments:[]},
+  {id:'QA-2026-004',title:'Weld Porosity — Bracket Sub-Assembly',type:'Process Non-Conformance',priority:'High',status:'Monitoring',area:'Fabrication',discovered:'2026-05-20',discoveredBy:'Okonkwo D.',desc:'Porosity identified in weld zone W3 on bracket assembly BA-114. Affects structural integrity.',rootCause:'Shielding gas flow rate set below specification.',immediateAction:'Affected assemblies tagged and segregated.',corrective:'Re-weld to spec. Operator retraining completed.',preventive:'Added pre-shift gas pressure check to weld SOP.',linkedSOP:['SOP-008'],linkedSpec:['INT-QA-001'],media:[],attachments:[]},
+  {id:'QA-2026-005',title:'Label Artwork Error — Part# P-4451',type:'Labeling / Packaging',priority:'Low',status:'Closed',area:'Packaging',discovered:'2026-04-15',discoveredBy:'Singh K.',desc:'Incorrect revision level printed on Part# P-4451 labels. Rev B labels applied to Rev C product.',rootCause:'Label artwork file not updated after ECN release.',immediateAction:'Relabeled 250 units. No product shipped incorrectly.',corrective:'Updated label artwork system to require ECN sign-off before print.',preventive:'Added artwork check to outgoing QC checklist.',linkedSOP:[],linkedSpec:[],media:[],attachments:[]},
+];
+let safetyAlerts=[
+  {id:'SA-2026-001',title:'Near-Miss: Forklift Pedestrian Conflict — Bay 3',type:'Near-Miss Incident',priority:'Critical',status:'Open',area:'Warehouse Bay 3',incident:'2026-06-02',reportedBy:'Floor Supervisor',injuryOccurred:false,desc:'Forklift FLT-03 nearly struck a pedestrian at the Bay 3 blind corner. No injury. Employee not wearing hi-vis vest.',rootCause:'Inadequate sight lines. Lack of hi-vis compliance.',immediateAction:'FLT-03 taken out of service. Bay 3 pedestrian crossing re-marked.',corrective:'Install convex mirror at Bay 3 corner. Enforce hi-vis vest policy.',preventive:'Revise SOP-004 to include pedestrian management at blind spots.',linkedSOP:['SOP-004'],linkedSpec:['OSHA-1910.178'],media:[],attachments:[]},
+  {id:'SA-2026-002',title:'Chemical Spill — Solvent Tank S-7 Overflow',type:'Chemical Incident',priority:'High',status:'Open',area:'Chemical Storage Zone',incident:'2026-05-30',reportedBy:'Reyes M.',injuryOccurred:false,desc:'Solvent tank S-7 overflowed during fill procedure, releasing approx. 12L of MEK onto the floor. No ignition. Area evacuated.',rootCause:'Fill level sensor malfunction. Operator skipped manual level check.',immediateAction:'Area evacuated. Spill contained with absorbent. EHS notified.',corrective:'Replace S-7 level sensor. Review fill procedure compliance.',preventive:'Add manual level check as mandatory step in SOP-001.',linkedSOP:['SOP-001'],linkedSpec:['OSHA-1910.119','EPA-40-CFR-264'],media:[],attachments:[]},
+  {id:'SA-2026-003',title:'Laceration Injury — Deburring Station D-2',type:'Recordable Injury',priority:'High',status:'Monitoring',area:'Machining',incident:'2026-05-18',reportedBy:'Okonkwo D.',injuryOccurred:true,desc:'Operator sustained a 2cm laceration on left hand at deburring station D-2. Treated on-site. OSHA 300 log entry recorded.',rootCause:'Operator not wearing cut-resistant gloves at deburring station.',immediateAction:'First aid administered. Incident reported to EHS.',corrective:'PPE compliance audit across all machining stations.',preventive:'Add cut-resistant glove requirement to SOP-009.',linkedSOP:['SOP-009'],linkedSpec:['ISO-45001:2018'],media:[],attachments:[]},
+  {id:'SA-2026-004',title:'Lockout Failure — Press PP-44 Maintenance',type:'Near-Miss Incident',priority:'Critical',status:'Closed',area:'Press Shop',incident:'2026-04-22',reportedBy:'Mercer J.',injuryOccurred:false,desc:'Maintenance technician discovered press PP-44 was not properly locked out during PM task. Machine was energized. No injury.',rootCause:'Technician skipped LOTO verification step due to time pressure.',immediateAction:'Work stopped. Machine locked out. Investigation opened.',corrective:'LOTO retraining for all maintenance staff. Spot audits initiated.',preventive:'Revised SOP-002 to require dual sign-off on LOTO verification.',linkedSOP:['SOP-002'],linkedSpec:['OSHA-1910.119','INT-EHS-002'],media:[],attachments:[]},
+];
+const sopApprovals=[
+  {id:'SOP-003',title:'Quality Inspection — Line A',ver:'1.9.2',submitter:'Chen W.',date:'2026-05-30',type:'Major revision',wf:'Standard SOP Review'},
+  {id:'SOP-005',title:'Incoming Goods Inspection',ver:'2.1.0',submitter:'Torres R.',date:'2026-05-28',type:'Periodic review',wf:'Standard SOP Review'},
+  {id:'SOP-010',title:'Fire Safety & Evacuation',ver:'2.2.0',submitter:'Okonkwo D.',date:'2026-06-01',type:'Regulatory update',wf:'Safety Document Approval'},
+];
+const edApprovals=[
+  {id:'DWG-E001',title:'Motor Control Center — MCC-2',ver:'A',submitter:'Singh K.',date:'2026-06-01',type:'New issue',wf:'Engineering Drawing Release'},
+  {id:'DWG-E002',title:'Plant Lighting Layout — Zone 3',ver:'A',submitter:'Singh K.',date:'2026-05-28',type:'New issue',wf:'Engineering Drawing Release'},
+  {id:'DWG-P002',title:'Compressed Air Dist. P&ID',ver:'B',submitter:'Yuen M.',date:'2026-05-25',type:'Revision',wf:'P&ID Approval'},
+];
+let pendingSOP=[...sopApprovals],pendingED=[...edApprovals],processedItems=[];
+let workflows=[
+  {name:'Standard SOP Review',applies:'sop',min:2,esc:5,rej:'Author + Department head',steps:['Author submits','QA review','Department head sign-off']},
+  {name:'Safety Document Approval',applies:'sop',min:2,esc:3,rej:'Full team',steps:['Author submits','Safety officer review','Plant manager sign-off']},
+  {name:'Engineering Drawing Release',applies:'ed',min:2,esc:7,rej:'Author only',steps:['Drafter submits','Peer check','Lead engineer approval','Document controller release']},
+  {name:'P&ID Approval',applies:'ed',min:3,esc:7,rej:'Author + Department head',steps:['Process eng. submits','HAZOP review','Instrument eng. check','Lead process sign-off']},
+];
+const versionData={
+  sop:{
+    'SOP-001':[{ver:'3.2.1',desc:'Updated storage limits for Class B solvents per EPA guidance.',who:'M. Reyes',date:'2026-05-12',cur:true},{ver:'3.2.0',desc:'Added spill containment procedures, Section 4.3.',who:'M. Reyes',date:'2026-02-08'},{ver:'3.1.0',desc:'Revised chemical compatibility chart.',who:'L. Park',date:'2025-11-14'}],
+    'SOP-002':[{ver:'2.4.0',desc:'Added hydraulic press LOTO sequence (equip. PP-44).',who:'D. Okonkwo',date:'2026-04-28',cur:true},{ver:'2.3.1',desc:'Corrected arc flash boundary label in Appendix B.',who:'J. Mercer',date:'2026-01-15'}],
+    'SOP-004':[{ver:'4.0.1',desc:'Updated max load table for newer forklift models.',who:'Floor Supervisor',date:'2026-03-15',cur:true},{ver:'4.0.0',desc:'Complete overhaul per OSHA 1910.178 revision cycle.',who:'Compliance Team',date:'2025-12-01'}],
+  },
+  ed:{
+    'DWG-M001':[{ver:'B',desc:'Revised machinery footprint after Line A reconfigure.',who:'Mech. Eng. Team',date:'2026-04-10',cur:true},{ver:'A',desc:'Initial issue — general arrangement.',who:'R. Huang',date:'2025-08-15'}],
+    'DWG-P001':[{ver:'D',desc:'Updated instrument tag list per FAT results.',who:'M. Yuen',date:'2026-02-14',cur:true},{ver:'C',desc:'Added bypass valve VI-112.',who:'M. Yuen',date:'2025-10-20'},{ver:'B',desc:'HAZOP action items incorporated.',who:'Process Eng.',date:'2025-06-01'}],
+    'DWG-M002':[{ver:'C',desc:'Updated bearing specification.',who:'R. Huang',date:'2026-03-18',cur:true},{ver:'B',desc:'Added lubrication points detail.',who:'R. Huang',date:'2025-12-05'}],
+  }
+};
+const roles=[
+  {i:'JM',n:'Jamie Mercer',d:'Plant Safety',r:'Admin',bg:'#D9EDF7',tc:'#31708F'},
+  {i:'MR',n:'Maria Reyes',d:'Environmental Eng.',r:'Approver',bg:'#FCF8E3',tc:'#8A6D3B'},
+  {i:'CW',n:'Chen Wei',d:'QA Team',r:'Author',bg:'#DFF0D8',tc:'#3C763D'},
+  {i:'RT',n:'Rodrigo Torres',d:'Receiving',r:'Author',bg:'#DFF0D8',tc:'#3C763D'},
+  {i:'DO',n:'Demi Okonkwo',d:'Maintenance',r:'Approver',bg:'#FCF8E3',tc:'#8A6D3B'},
+  {i:'KS',n:'Kavitha Singh',d:'Electrical Eng.',r:'Author',bg:'#DFF0D8',tc:'#3C763D'},
+  {i:'MY',n:'Ming Yuen',d:'Process Eng.',r:'Approver',bg:'#FCF8E3',tc:'#8A6D3B'},
+  {i:'LP',n:'Lisa Park',d:'HR Dept.',r:'Viewer',bg:'#F5F5F5',tc:'#777'},
+];
+let sopTag='All',edTag='All',sopStatusFilter=null,edStatusFilter=null,searchQ='';
+let apprTab='sop',wfTab='all',specLibFilter='All',tmplCatFilter='All';
+let qaFilter='All',saFilter='All',verType='sop';
+let wfSteps=[],tmplSections=[],linkedSpecs=[],pendingMedia=[];
+let alertMediaFiles={qa:[],sa:[]},alertAttachFiles={qa:[],sa:[]};
+let newDocType='sop';
+
+function sc(s){return s==='Active'?'s-act':s==='Under Review'?'s-rev':s==='Draft'?'s-drf':s==='Open'?'s-open':s==='Closed'?'s-closed':s==='Monitoring'?'s-monitor':'s-arc';}
+function priCls(p){return p==='Critical'?'pri-crit':p==='High'?'pri-high':p==='Medium'?'pri-med':'pri-low';}
+
+function renderSOPs(){
+  let d=sops;
+  if(sopStatusFilter)d=d.filter(x=>x.status===sopStatusFilter);
+  if(sopTag!=='All')d=d.filter(x=>x.tags.includes(sopTag));
+  if(searchQ)d=d.filter(x=>x.title.toLowerCase().includes(searchQ)||x.id.toLowerCase().includes(searchQ));
+  document.getElementById('sop-tbody').innerHTML=d.length?d.map(s=>{
+    const hasVid=s.media.some(m=>/\.(mp4|mov|avi)/i.test(m));
+    const hasImg=s.media.some(m=>/\.(jpg|jpeg|png|gif)/i.test(m));
+    let mb='<span style="color:var(--cp-gray)">—</span>';
+    if(s.media.length){mb=`<span style="font-size:10px;font-weight:600;color:var(--cp-blue-active)">${hasVid?'<i class="ti ti-player-play" style="font-size:10px"></i> ':''}${hasImg?'<i class="ti ti-photo" style="font-size:10px"></i> ':''}${s.media.length}</span>`;}
+    return `<tr><td><span class="mid">${s.id}</span></td><td><div class="mtitle">${s.title}</div><div class="mdesc">${s.desc}</div></td><td style="font-family:monospace;font-size:10px;font-weight:700">${s.ver}</td><td><span class="sp ${sc(s.status)}">${s.status}</span></td><td>${s.tags.slice(0,1).map(t=>`<span class="tag">${t}</span>`).join('')}</td><td>${mb}</td><td style="font-size:10px;color:var(--cp-amber);font-weight:600">${s.specs.length||'—'}</td><td style="font-size:10px">${s.owner}</td></tr>`;
+  }).join(''):'<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--cp-gray);font-size:12px">No SOPs match your filter</td></tr>';
+  document.getElementById('stat-sop-tot').textContent=sops.length;
+  document.getElementById('stat-sop-media').textContent=sops.filter(s=>s.media.length>0).length;
+}
+
+function renderDrawings(){
+  let d=drawings;
+  if(edStatusFilter)d=d.filter(x=>x.status===edStatusFilter);
+  if(edTag!=='All')d=d.filter(x=>x.tags.includes(edTag));
+  if(searchQ)d=d.filter(x=>x.title.toLowerCase().includes(searchQ)||x.id.toLowerCase().includes(searchQ));
+  document.getElementById('ed-tbody').innerHTML=d.length?d.map(s=>`<tr><td><span class="mid">${s.id}</span></td><td><div class="mtitle">${s.title}</div><div class="mdesc">${s.desc||''}</div></td><td style="font-family:monospace;font-size:10px;font-weight:700">${s.ver}</td><td><span class="sp ${sc(s.status)}">${s.status}</span></td><td>${s.tags.slice(0,1).map(t=>`<span class="tag">${t}</span>`).join('')}</td><td style="font-size:10px;color:var(--cp-amber);font-weight:600">${s.specs.length||'—'}</td><td style="font-size:10px">${s.owner}</td><td style="font-size:10px;color:var(--cp-gray)">${s.updated}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--cp-gray);font-size:12px">No drawings match your filter</td></tr>';
+}
+
+function renderSpecs(){
+  let d=specs;
+  if(specLibFilter!=='All')d=d.filter(s=>s.libs.includes(specLibFilter));
+  if(searchQ)d=d.filter(s=>s.title.toLowerCase().includes(searchQ)||s.id.toLowerCase().includes(searchQ)||s.body.toLowerCase().includes(searchQ));
+  document.getElementById('specs-list').innerHTML=d.length?d.map((s,i)=>`<div class="spec-card"><div class="spec-icon"><i class="ti ti-file-text"></i></div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:var(--cp-navy)"><span class="mid">${s.id}</span>&nbsp;&nbsp;${s.title}</div><div style="font-size:10px;color:var(--cp-gray);margin-top:2px">${s.body} · Rev/Ed: ${s.rev} · ${s.desc}</div><div style="margin-top:5px">${s.libs.map(l=>`<span class="lib-badge">${l}</span>`).join('')}</div></div><button class="bs rj" onclick="specs.splice(${i},1);renderSpecs();showToast('Spec removed')" style="flex-shrink:0"><i class="ti ti-trash"></i></button></div>`).join(''):'<div style="text-align:center;padding:36px;font-size:12px;color:var(--cp-gray)">No specifications found in this library</div>';
+  document.getElementById('spec-nav-ct').textContent=specs.length;
+}
+
+
+// ============================================================
+//  TEMPLATE REVISION CONTROL — Full replacement
+// ============================================================
+let tmplFilter='All';
+let _retireIdx=null;
+
+function renderTemplates(){
+  const el=document.getElementById('templates-content');
+  if(!el)return;
+  const retiredCt=retiredTemplates.length;
+  const retiredBadge=document.getElementById('sb-retired-ct');
+  if(retiredBadge){retiredBadge.textContent=retiredCt;retiredBadge.style.display=retiredCt>0?'':'none';}
+  document.getElementById('tmpl-nav-ct').textContent=templates.length;
+
+  // HISTORY VIEW
+  if(tmplFilter==='History'){
+    const allHistory=[
+      ...templates.flatMap(t=>t.history.map(h=>({...h,tmplName:t.name,tmplId:t.id,cat:t.cat,status:t.status}))),
+      ...retiredTemplates.flatMap(t=>t.history.map(h=>({...h,tmplName:t.name,tmplId:t.id,cat:t.cat,status:'Retired'})))
+    ].sort((a,b)=>b.date.localeCompare(a.date));
+    el.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <span style="font-size:13px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.04em"><i class="ti ti-versions" style="margin-right:7px"></i>Full Revision History</span>
+        <span style="font-size:10px;color:var(--cp-gray)">${allHistory.length} revision entries across ${templates.length+retiredTemplates.length} templates</span>
+      </div>
+      <div style="background:var(--cp-white);border:1px solid var(--cp-border);border-radius:3px;padding:14px">
+        <div class="rev-timeline">
+          ${allHistory.map(h=>`
+            <div class="rev-entry">
+              <div class="rev-dot ${h.isCurrent&&h.status!=='Retired'?'current':h.status==='Retired'?'retired':''}"></div>
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+                <div style="flex:1">
+                  <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                    <span style="font-size:10px;font-weight:700;color:var(--cp-gray)">${h.tmplId}</span>
+                    <span style="font-size:12px;font-weight:700;color:var(--cp-navy)">${h.tmplName}</span>
+                    <span class="ver-badge">v${h.ver}</span>
+                    ${h.isCurrent&&h.status!=='Retired'?'<span class="sp s-act">Current</span>':''}
+                    ${h.status==='Retired'?'<span class="sp s-arc">Retired</span>':''}
+                  </div>
+                  <div style="margin-top:4px"><span class="reason-chip">${h.reason}</span><span style="font-size:10px;color:var(--cp-gray)">${h.by} &middot; ${h.date}</span></div>
+                  <div style="font-size:11px;color:var(--cp-navy);margin-top:3px">${h.notes}</div>
+                </div>
+                <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px;background:#F3E8FF;color:#5B3FA6;border:1px solid #CE93D8;text-transform:uppercase;white-space:nowrap;flex-shrink:0">${h.cat}</span>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    return;
+  }
+
+  // RETIRED VIEW
+  if(tmplFilter==='Retired'){
+    el.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <span style="font-size:13px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.04em"><i class="ti ti-archive" style="margin-right:7px;color:var(--cp-amber)"></i>Retired Templates</span>
+        <span style="font-size:10px;color:var(--cp-gray)">${retiredTemplates.length} retired template${retiredTemplates.length!==1?'s':''} — read-only archive</span>
+      </div>
+      ${retiredTemplates.length?retiredTemplates.map((t,ri)=>renderTmplCard(t,ri,true)).join('')
+        :'<div style="text-align:center;padding:36px;font-size:12px;color:var(--cp-gray)"><i class="ti ti-archive" style="font-size:30px;display:block;margin-bottom:9px;color:var(--cp-amber)"></i>No retired templates</div>'}`;
+    return;
+  }
+
+  // ACTIVE VIEW (All / category filter)
+  let d=templates;
+  if(tmplFilter.startsWith('cat:'))d=d.filter(t=>t.cat===tmplFilter.split(':')[1]);
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <span style="font-size:13px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.04em"><i class="ti ti-template" style="margin-right:7px"></i>SOP Templates</span>
+      <button class="btn pri" onclick="openTmplModal()"><i class="ti ti-plus"></i> New Template</button>
+    </div>
+    <div class="sg">
+      <div class="sc" style="border-top-color:#7B5EA7"><div class="sl">Active Templates</div><div class="sv">${templates.length}</div><div class="ss">${new Set(templates.map(t=>t.cat)).size} categories</div></div>
+      <div class="sc" style="border-top-color:#7B5EA7"><div class="sl">Total Revisions</div><div class="sv" style="color:#7B5EA7">${templates.reduce((s,t)=>s+t.history.length,0)}</div><div class="ss">change entries</div></div>
+      <div class="sc" style="border-top-color:var(--cp-amber)"><div class="sl">Retired</div><div class="sv" style="color:var(--cp-amber)">${retiredTemplates.length}</div><div class="ss">in history archive</div></div>
+      <div class="sc" style="border-top-color:#7B5EA7"><div class="sl">Latest Activity</div><div class="sv" style="font-size:13px;color:var(--cp-navy)">${templates.reduce((l,t)=>t.lastModified>l?t.lastModified:l,'').slice(5)||'—'}</div><div class="ss">last modified</div></div>
+    </div>
+    ${d.length?d.map((t,gi)=>renderTmplCard(t,templates.indexOf(t),false)).join('')
+      :'<div style="text-align:center;padding:36px;font-size:12px;color:var(--cp-gray)">No templates found</div>'}`;
+}
+
+function renderTmplCard(t,ri,isRetired){
+  const latestHistory=t.history[0]||{};
+  return `<div class="tmpl-card ${isRetired?'retired':''}">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:10px">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span style="font-family:monospace;font-size:10px;font-weight:700;color:#7B5EA7">${t.id}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--cp-navy)">${t.name}</span>
+          <span class="tmpl-cat">${t.cat}</span>
+          <span class="ver-badge">v${t.ver}</span>
+          ${isRetired?'<span class="sp s-arc">Retired</span>':'<span class="sp s-act">Active</span>'}
+        </div>
+        <div style="font-size:10px;color:var(--cp-gray);margin-top:3px">${t.desc}</div>
+        <div style="font-size:10px;color:var(--cp-gray);margin-top:3px">
+          Created by ${t.createdBy} &middot; ${t.createdDate}
+          &nbsp;&middot;&nbsp;Last modified by <strong>${t.lastModifiedBy}</strong> &middot; ${t.lastModified}
+        </div>
+        ${isRetired?`<div style="margin-top:5px;padding:5px 9px;background:#FFF3E0;border-radius:2px;border-left:2px solid var(--cp-amber);font-size:10px"><strong>Retired ${t.retiredDate}</strong> by ${t.retiredBy} &middot; Reason: ${t.retireReason}<br>${t.retireNotes}</div>`:''}
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end">
+        ${!isRetired?`<button class="bs" onclick="useTemplate(${ri})"><i class="ti ti-file-plus"></i> Use</button>`:''}
+        ${!isRetired?`<button class="bs" onclick="openTmplModal(${ri})"><i class="ti ti-edit"></i> Edit</button>`:''}
+        ${!isRetired?`<button class="bs" style="background:#FFF3E0;border-color:#FFCC80;color:#8A4500" onclick="openRetireModal(${ri})"><i class="ti ti-archive"></i> Retire</button>`:''}
+      </div>
+    </div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px">
+      ${t.sections.slice(0,5).map(s=>`<div style="font-size:10px;padding:3px 8px;border-left:2px solid var(--cp-blue-lt);background:var(--cp-row-alt);color:var(--cp-navy)">${s}</div>`).join('')}
+      ${t.sections.length>5?`<div style="font-size:10px;padding:3px 8px;color:var(--cp-gray)">+${t.sections.length-5} more…</div>`:''}
+    </div>
+    <div style="font-size:10px;color:var(--cp-gray);margin-bottom:8px">
+      Default specs: ${t.defaultSpecs.join(', ')||'none'} &nbsp;&middot;&nbsp; Workflow: ${t.wf||'none'}
+    </div>
+    <!-- REVISION HISTORY MINI-TIMELINE -->
+    <div style="border-top:1px solid var(--cp-border);padding-top:8px;margin-top:2px">
+      <div style="font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px"><i class="ti ti-versions" style="margin-right:4px"></i>Revision History (${t.history.length} entries)</div>
+      <div class="rev-timeline">
+        ${t.history.slice(0,3).map(h=>`
+          <div class="rev-entry" style="padding:5px 0">
+            <div class="rev-dot ${h.isCurrent&&!isRetired?'current':isRetired?'retired':''}"></div>
+            <div style="display:flex;align-items:flex-start;gap:8px">
+              <span class="ver-badge" style="flex-shrink:0;margin-top:1px">v${h.ver}</span>
+              <div>
+                <span class="reason-chip">${h.reason}</span>
+                <span style="font-size:10px;color:var(--cp-gray)">${h.by} &middot; ${h.date}</span>
+                <div style="font-size:10px;color:var(--cp-navy);margin-top:2px">${h.notes.substring(0,90)}${h.notes.length>90?'…':''}</div>
+              </div>
+            </div>
+          </div>`).join('')}
+        ${t.history.length>3?`<div style="font-size:10px;color:var(--cp-gray);padding:3px 0 0 2px;cursor:pointer" onclick="showAllHistory('${t.id}')"><i class="ti ti-dots"></i> +${t.history.length-3} earlier entries — click to expand</div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function showAllHistory(tmplId){
+  const t=[...templates,...retiredTemplates].find(x=>x.id===tmplId);
+  if(!t)return;
+  const el=document.querySelector(`[data-tmplid="${tmplId}"] .rev-timeline`);
+  // Re-render the card without truncation by going to history view filtered
+  filterTmpl('History',null);
+}
+
+function filterTmpl(f,el){
+  tmplFilter=f;
+  document.querySelectorAll('#sb-tmpl .sni').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderTemplates();
+}
+
+function openTmplModal(editIdx){
+  tmplSections=editIdx!=null?[...templates[editIdx].sections]:['1. Purpose & Scope','2. Responsibilities','3. Procedure Steps','4. Safety Requirements','5. Document Control'];
+  const wfSel=document.getElementById('tm-wf');
+  wfSel.innerHTML='<option value="">None (manual)</option>'+workflows.filter(w=>w.applies==='sop'||w.applies==='both').map(w=>`<option>${w.name}</option>`).join('');
+  const isEdit=editIdx!=null;
+  const reasonBlock=document.getElementById('tm-reason-block');
+  if(isEdit){
+    const t=templates[editIdx];
+    document.getElementById('tm-name').value=t.name;
+    document.getElementById('tm-cat').value=t.cat;
+    document.getElementById('tm-desc').value=t.desc;
+    document.getElementById('tm-tag').value=t.tag;
+    document.getElementById('tm-ver').value=t.ver;
+    wfSel.value=t.wf||'';
+    document.getElementById('modal-tmpl')._ei=editIdx;
+    document.getElementById('tmpl-modal-title').innerHTML='<i class="ti ti-template" style="margin-right:6px"></i>Edit / Revise SOP Template';
+    document.getElementById('tm-save-btn').textContent=' Save Revision';
+    // Show mandatory reason block on edit
+    reasonBlock.style.display='';
+    document.getElementById('tm-reason-type').value='';
+    document.getElementById('tm-reason-notes').value='';
+    document.getElementById('tm-revised-by').value='Jamie Mercer';
+    document.getElementById('tm-rev-date').value='2026-06-08';
+  } else {
+    ['tm-name','tm-desc'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('tm-ver').value='1.0';
+    document.getElementById('modal-tmpl')._ei=null;
+    document.getElementById('tmpl-modal-title').innerHTML='<i class="ti ti-template" style="margin-right:6px"></i>Create SOP Template';
+    document.getElementById('tm-save-btn').innerHTML='<i class="ti ti-check"></i> Create Template';
+    // Hide reason block on create (initial release)
+    reasonBlock.style.display='none';
+  }
+  renderTmplSections();
+  document.getElementById('tmpl-spec-picker').innerHTML=specs.map(s=>`<div class="lib-check-row"><input type="checkbox" id="tsp-${s.id}" ${isEdit&&templates[editIdx].defaultSpecs.includes(s.id)?'checked':''}><label for="tsp-${s.id}" style="cursor:pointer;font-size:11px"><strong>${s.id}</strong> — ${s.title.substring(0,36)}</label></div>`).join('');
+  document.getElementById('modal-tmpl').classList.add('open');
+}
+
+function toggleReasonDetail(val){/* field already visible */}
+
+function renderTmplSections(){
+  document.getElementById('tmpl-sections-list').innerHTML=tmplSections.map((s,i)=>`
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">
+      <input type="text" value="${s}" oninput="tmplSections[${i}]=this.value" style="flex:1;font-size:12px;padding:6px 9px;border:1px solid var(--cp-border);border-radius:3px;background:var(--cp-bg);color:var(--cp-navy)" placeholder="Section title">
+      ${tmplSections.length>2?`<button class="bs rj" onclick="tmplSections.splice(${i},1);renderTmplSections()" style="padding:3px 7px"><i class="ti ti-x"></i></button>`:''}
+    </div>`).join('');
+}
+
+function addTmplSection(){tmplSections.push(`${tmplSections.length+1}. New Section`);renderTmplSections();}
+
+function saveTemplate(){
+  const name=document.getElementById('tm-name').value.trim();
+  if(!name){showToast('Template name is required');return;}
+  const ei=document.getElementById('modal-tmpl')._ei;
+  const isEdit=ei!=null;
+
+  // MANDATORY revision reason validation on edit
+  if(isEdit){
+    const reasonType=document.getElementById('tm-reason-type').value.trim();
+    const reasonNotes=document.getElementById('tm-reason-notes').value.trim();
+    if(!reasonType){
+      document.getElementById('tm-reason-type').style.borderColor='var(--cp-red)';
+      document.getElementById('tm-reason-block').style.background='#FFEBEE';
+      document.getElementById('tm-reason-block').style.borderColor='var(--cp-red)';
+      showToast('⚠ Reason for revision is required');
+      return;
+    }
+    if(!reasonNotes){
+      document.getElementById('tm-reason-notes').style.borderColor='var(--cp-red)';
+      showToast('⚠ Revision notes are required');
+      return;
+    }
+  }
+
+  const defSpecs=specs.filter(s=>{const el=document.getElementById('tsp-'+s.id);return el&&el.checked;}).map(s=>s.id);
+  const now='2026-06-08';
+  const revisedBy=isEdit?document.getElementById('tm-revised-by').value.trim():'Jamie Mercer';
+
+  if(isEdit){
+    const old=templates[ei];
+    const newVer=document.getElementById('tm-ver').value.trim()||old.ver;
+    const reasonType=document.getElementById('tm-reason-type').value;
+    const reasonNotes=document.getElementById('tm-reason-notes').value.trim();
+    // Mark all existing history entries as not current
+    const updatedHistory=old.history.map(h=>({...h,isCurrent:false}));
+    // Prepend new entry
+    updatedHistory.unshift({ver:newVer,date:document.getElementById('tm-rev-date').value||now,by:revisedBy,reason:reasonType,notes:reasonNotes,isCurrent:true});
+    templates[ei]={...old,name,cat:document.getElementById('tm-cat').value,desc:document.getElementById('tm-desc').value.trim(),tag:document.getElementById('tm-tag').value,ver:newVer,lastModified:now,lastModifiedBy:revisedBy,sections:[...tmplSections],defaultSpecs:defSpecs,wf:document.getElementById('tm-wf').value,history:updatedHistory};
+    closeMBg({target:document.getElementById('modal-tmpl')},'modal-tmpl');
+    renderTemplates();
+    showToast(`${name} revised to v${newVer}`);
+  } else {
+    const newId='TMPL-'+String(templates.length+retiredTemplates.length+1).padStart(3,'0');
+    const newVer=document.getElementById('tm-ver').value.trim()||'1.0';
+    const t={id:newId,name,cat:document.getElementById('tm-cat').value,desc:document.getElementById('tm-desc').value.trim(),tag:document.getElementById('tm-tag').value,ver:newVer,status:'Active',createdBy:'Jamie Mercer',createdDate:now,lastModified:now,lastModifiedBy:'Jamie Mercer',sections:[...tmplSections],defaultSpecs:defSpecs,wf:document.getElementById('tm-wf').value,history:[{ver:newVer,date:now,by:'Jamie Mercer',reason:'Initial Release',notes:'New template created.',isCurrent:true}]};
+    templates.push(t);
+    closeMBg({target:document.getElementById('modal-tmpl')},'modal-tmpl');
+    renderTemplates();
+    showToast(`${newId} "${name}" created — v${newVer}`);
+  }
+}
+
+function useTemplate(i){
+  newDocType='sop';
+  populateNewSOPModal();
+  document.getElementById('f-tmpl').value=templates[i].name;
+  applyTemplate(templates[i].name);
+  document.getElementById('modal-new').classList.add('open');
+}
+
+// RETIRE MODAL
+function openRetireModal(ri){
+  _retireIdx=ri;
+  const t=templates[ri];
+  document.getElementById('retire-tmpl-name').innerHTML=`<i class="ti ti-template" style="margin-right:6px;color:#7B5EA7"></i>${t.id} — ${t.name} <span class="ver-badge">v${t.ver}</span>`;
+  document.getElementById('retire-reason').value='';
+  document.getElementById('retire-notes').value='';
+  document.getElementById('retire-by').value='Jamie Mercer — Admin';
+  document.getElementById('retire-error').style.display='none';
+  const btn=document.getElementById('retire-confirm-btn');
+  btn.disabled=true;btn.style.opacity='.4';btn.style.cursor='not-allowed';
+  document.getElementById('modal-retire').classList.add('open');
+}
+
+function checkRetireReady(){
+  const reason=document.getElementById('retire-reason').value.trim();
+  const notes=document.getElementById('retire-notes').value.trim();
+  const btn=document.getElementById('retire-confirm-btn');
+  const errEl=document.getElementById('retire-error');
+  if(reason&&notes.length>=10){
+    btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';
+    errEl.style.display='none';
+  } else {
+    btn.disabled=true;btn.style.opacity='.4';btn.style.cursor='not-allowed';
+    if((reason||notes)&&!(reason&&notes.length>=10))errEl.style.display='';
+  }
+}
+
+function confirmRetire(){
+  if(_retireIdx===null)return;
+  const reason=document.getElementById('retire-reason').value.trim();
+  const notes=document.getElementById('retire-notes').value.trim();
+  if(!reason||notes.length<10){
+    document.getElementById('retire-error').style.display='';
+    return;
+  }
+  const t=templates[_retireIdx];
+  const retiredEntry={...t,status:'Retired',retiredDate:'2026-06-08',retiredBy:document.getElementById('retire-by').value,retireReason:reason,retireNotes:notes};
+  retiredTemplates.unshift(retiredEntry);
+  templates.splice(_retireIdx,1);
+  _retireIdx=null;
+  closeMBg({target:document.getElementById('modal-retire')},'modal-retire');
+  renderTemplates();
+  showToast(`"${retiredEntry.name}" retired to history archive`);
+}
+
+
+
+function renderAlerts(type){
+  const data=type==='qa'?qualityAlerts:safetyAlerts;
+  const filter=type==='qa'?qaFilter:saFilter;
+  let d=filter==='All'?[...data]:data.filter(a=>a.status===filter);
+  if(searchQ)d=d.filter(a=>a.title.toLowerCase().includes(searchQ)||a.id.toLowerCase().includes(searchQ));
+  const el=document.getElementById(type+'-list');
+  el.innerHTML=d.length?d.map((a)=>{
+    const aIdx=data.indexOf(a);
+    return `<div class="alert-card ${type}"><div class="alert-icon ${type}"><i class="ti ti-${type==='qa'?'checkbox':'alert-triangle'}"></i></div><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px"><span class="mid">${a.id}</span><span class="sp ${sc(a.status)}">${a.status}</span><span class="atag ${priCls(a.priority)}">${a.priority}</span>${type==='sa'&&a.injuryOccurred?'<span class="atag" style="background:#B71C1C;color:#fff">Injury Recorded</span>':''}</div><div style="font-size:13px;font-weight:700;color:var(--cp-navy)">${a.title}</div><div style="font-size:10px;color:var(--cp-gray);margin-top:2px">${type==='qa'?a.type+' · Discovered '+a.discovered+' by '+a.discoveredBy:a.type+' · Incident '+a.incident+' · Reported by '+a.reportedBy} · Area: ${a.area}</div><div style="font-size:11px;color:var(--cp-navy);margin-top:5px">${a.desc.substring(0,140)}${a.desc.length>140?'…':''}</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">${a.linkedSOP.map(s=>`<span class="atag ${type}"><i class="ti ti-file-description" style="font-size:9px"></i> ${s}</span>`).join('')}${a.linkedSpec.map(s=>`<span class="atag" style="background:#FFF3E0;color:#8A4500;border:1px solid #FFCC80">${s}</span>`).join('')}${a.media.length?`<span class="atag" style="background:var(--cp-blue-lt);color:var(--cp-blue-active)"><i class="ti ti-photo" style="font-size:9px"></i> ${a.media.length} media</span>`:''}</div>${a.immediateAction?`<div style="margin-top:7px;padding:6px 9px;background:rgba(255,255,255,.7);border-radius:2px;border-left:3px solid ${type==='qa'?'var(--qa-color)':'var(--sa-color)'};font-size:10px;color:var(--cp-navy)"><strong>Immediate action:</strong> ${a.immediateAction}</div>`:''}</div><div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">${a.status!=='Closed'?`<button class="bs ap" onclick="closeAlert('${type}',${aIdx})"><i class="ti ti-circle-check"></i> Close</button>`:''}</div></div>`;
+  }).join(''):`<div style="text-align:center;padding:36px;font-size:12px;color:var(--cp-gray)">No ${type==='qa'?'quality':'safety'} alerts match this filter</div>`;
+  updateAlertStats();
+}
+
+function updateAlertStats(){
+  document.getElementById('stat-qa-tot').textContent=qualityAlerts.length;
+  document.getElementById('stat-qa-open').textContent=qualityAlerts.filter(a=>a.status==='Open').length;
+  document.getElementById('stat-qa-mon').textContent=qualityAlerts.filter(a=>a.status==='Monitoring').length;
+  document.getElementById('stat-qa-cls').textContent=qualityAlerts.filter(a=>a.status==='Closed').length;
+  document.getElementById('stat-sa-tot').textContent=safetyAlerts.length;
+  document.getElementById('stat-sa-open').textContent=safetyAlerts.filter(a=>a.status==='Open').length;
+  document.getElementById('stat-sa-mon').textContent=safetyAlerts.filter(a=>a.status==='Monitoring').length;
+  document.getElementById('stat-sa-cls').textContent=safetyAlerts.filter(a=>a.status==='Closed').length;
+  document.getElementById('qa-nav-ct').textContent=qualityAlerts.length;
+  document.getElementById('sa-nav-ct').textContent=safetyAlerts.length;
+  document.getElementById('sb-qa-open').textContent=qualityAlerts.filter(a=>a.status==='Open').length;
+  document.getElementById('sb-sa-open').textContent=safetyAlerts.filter(a=>a.status==='Open').length;
+}
+
+function closeAlert(type,i){
+  const arr=type==='qa'?qualityAlerts:safetyAlerts;
+  arr[i].status='Closed';
+  renderAlerts(type);
+  showToast(arr[i].id+' closed');
+}
+function filterAlert(status,type,el){
+  if(type==='qa'){qaFilter=status;document.querySelectorAll('#qa-chips .chip').forEach(c=>c.classList.remove('active'));document.querySelectorAll('#sb-qa .sni').forEach(n=>n.classList.remove('active'));}
+  else{saFilter=status;document.querySelectorAll('#sa-chips .chip').forEach(c=>c.classList.remove('active'));document.querySelectorAll('#sb-sa .sni').forEach(n=>n.classList.remove('active'));}
+  if(el)el.classList.add('active');
+  renderAlerts(type);
+}
+
+function buildAlertForm(type){
+  const isQA=type==='qa';
+  const c=isQA?'var(--qa-color)':'var(--sa-color)';
+  const nextId=isQA?`QA-2026-00${qualityAlerts.length+1}`:`SA-2026-00${safetyAlerts.length+1}`;
+  alertMediaFiles[type]=[];alertAttachFiles[type]=[];
+  document.getElementById(type+'-form-content').innerHTML=`
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+    <div>
+      <div class="alert-form-block">
+        <div class="alert-form-block-title" style="color:${c}"><i class="ti ti-id"></i> Alert Identification</div>
+        <div class="fg"><label>Alert ID</label><input type="text" id="${type}-id" value="${nextId}" readonly style="font-weight:700;font-family:monospace;background:var(--cp-white)"></div>
+        <div class="fg"><label>Title *</label><input type="text" id="${type}-title" placeholder="Brief descriptive title"></div>
+        <div class="fg"><label>Alert Type *</label><select id="${type}-type">${isQA?'<option>Dimensional Non-Conformance</option><option>Surface / Cosmetic Defect</option><option>Process Non-Conformance</option><option>Supplier / Material Issue</option><option>Labeling / Packaging</option><option>Functional Failure</option><option>Other</option>':'<option>Near-Miss Incident</option><option>Recordable Injury</option><option>First Aid Injury</option><option>Chemical Incident</option><option>Fire / Explosion</option><option>Environmental Release</option><option>Property Damage</option><option>Other</option>'}</select></div>
+        <div class="rp"><div class="fg"><label>Priority *</label><select id="${type}-priority"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></div><div class="fg"><label>Area / Location *</label><input type="text" id="${type}-area" placeholder="e.g. Assembly Line A"></div></div>
+        <div class="rp"><div class="fg"><label>${isQA?'Date Discovered *':'Incident Date *'}</label><input type="date" id="${type}-date" value="2026-06-08"></div><div class="fg"><label>${isQA?'Discovered By *':'Reported By *'}</label><input type="text" id="${type}-by" placeholder="Name / role"></div></div>
+        ${!isQA?'<div class="fg"><label>Injury Occurred?</label><select id="'+type+'-injury"><option value="false">No — near-miss / property damage</option><option value="true">Yes — injury recorded (OSHA log)</option></select></div>':''}
+        ${isQA?'<div class="fg"><label>Affected Product / Batch</label><input type="text" id="'+type+'-batch" placeholder="e.g. Batch QA-7712-B"></div>':'<div class="fg"><label>Equipment / Asset Involved</label><input type="text" id="'+type+'-asset" placeholder="e.g. FLT-03, Press PP-44"></div>'}
+      </div>
+      <div class="alert-form-block">
+        <div class="alert-form-block-title" style="color:${c}"><i class="ti ti-link"></i> Linked Documents</div>
+        <div class="fg"><label>Linked SOPs</label><select id="${type}-linked-sop" multiple style="height:76px">${sops.map(s=>`<option value="${s.id}">${s.id} — ${s.title.substring(0,30)}</option>`).join('')}</select><div style="font-size:9px;color:var(--cp-gray);margin-top:2px">Hold Ctrl/Cmd to multi-select</div></div>
+        <div class="fg"><label>Linked Specifications</label><select id="${type}-linked-spec" multiple style="height:60px">${specs.map(s=>`<option value="${s.id}">${s.id} — ${s.title.substring(0,28)}</option>`).join('')}</select></div>
+      </div>
+    </div>
+    <div>
+      <div class="alert-form-block" style="margin-bottom:12px">
+        <div class="alert-form-block-title" style="color:${c}"><i class="ti ti-file-text"></i> Description &amp; Findings</div>
+        <div class="fg"><label>Description *</label><textarea id="${type}-desc" style="height:80px" placeholder="${isQA?'Describe what was found, what was affected, and the extent of the non-conformance…':'Describe what happened, what was observed, and who was involved…'}"></textarea></div>
+        <div class="fg"><label>Immediate Containment / Response *</label><textarea id="${type}-immediate" style="height:60px" placeholder="${isQA?'Quarantine batch, line stop, customer hold…':'Area evacuated, first aid administered, machine locked out…'}"></textarea></div>
+      </div>
+      <div class="alert-form-block" style="margin-bottom:12px">
+        <div class="alert-form-block-title" style="color:${c}"><i class="ti ti-search"></i> Root Cause &amp; Actions</div>
+        <div class="fg"><label>Root Cause Analysis</label><textarea id="${type}-root" style="height:52px" placeholder="Why did this occur?"></textarea></div>
+        <div class="fg"><label>Corrective Action</label><textarea id="${type}-corrective" style="height:52px" placeholder="What will be done to fix it?"></textarea></div>
+        <div class="fg"><label>Preventive Action</label><textarea id="${type}-preventive" style="height:52px" placeholder="What will prevent recurrence?"></textarea></div>
+      </div>
+      <div class="alert-form-block">
+        <div class="alert-form-block-title" style="color:${c}"><i class="ti ti-photo-video"></i> Photos, Videos &amp; Attachments</div>
+        <div class="file-drop ${isQA?'qa-drop':'sa-drop'}" onclick="document.getElementById('${type}-media-input').click()" style="padding:10px"><i class="ti ti-cloud-upload" style="font-size:18px;display:block;margin-bottom:3px"></i>Upload photos or videos (JPG, PNG, MP4, MOV)</div>
+        <input type="file" id="${type}-media-input" style="display:none" multiple accept="image/*,video/*" onchange="handleAlertMedia(this,'${type}')">
+        <div id="${type}-media-preview" class="media-row"></div>
+        <div style="margin-top:8px"><div class="file-drop ${isQA?'qa-drop':'sa-drop'}" onclick="document.getElementById('${type}-file-input').click()" style="padding:8px;font-size:10px"><i class="ti ti-paperclip" style="font-size:14px"></i> Attach supporting documents (PDF, DOCX)</div>
+        <input type="file" id="${type}-file-input" style="display:none" multiple accept=".pdf,.docx" onchange="handleAlertFile(this,'${type}')">
+        <div id="${type}-file-list"></div></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:9px;padding-top:12px;border-top:1px solid var(--cp-border)">
+    <button class="btn" onclick="navTop('${type}-lib',null)"><i class="ti ti-x"></i> Cancel</button>
+    <button class="btn" onclick="saveAlert('${type}','Draft')"><i class="ti ti-device-floppy"></i> Save as Draft</button>
+    <button class="btn ${isQA?'qa-btn':'sa-btn'}" onclick="saveAlert('${type}','Open')"><i class="ti ti-send"></i> Issue Alert</button>
+  </div>`;
+}
+
+function handleAlertMedia(input,type){
+  Array.from(input.files).forEach(f=>alertMediaFiles[type].push(f));
+  document.getElementById(type+'-media-preview').innerHTML=alertMediaFiles[type].map(f=>f.type.startsWith('video')?`<div class="media-thumb-vid" title="${f.name}"><i class="ti ti-player-play"></i></div>`:`<div class="media-thumb-img" title="${f.name}"><i class="ti ti-photo"></i></div>`).join('');
+  input.value='';
+}
+function handleAlertFile(input,type){
+  Array.from(input.files).forEach(f=>alertAttachFiles[type].push(f));
+  document.getElementById(type+'-file-list').innerHTML=alertAttachFiles[type].map((f,i)=>`<div class="attach-item"><i class="ti ti-file" style="color:var(--cp-amber)"></i><span class="attach-name">${f.name}</span><button class="attach-remove" onclick="alertAttachFiles['${type}'].splice(${i},1);handleAlertFile({files:[]},'${type}')"><i class="ti ti-x"></i></button></div>`).join('');
+}
+function saveAlert(type,status){
+  const title=document.getElementById(type+'-title').value.trim();
+  if(!title){showToast('Title is required');return;}
+  const sopSel=document.getElementById(type+'-linked-sop');
+  const specSel=document.getElementById(type+'-linked-spec');
+  const isQA=type==='qa';
+  const obj={id:document.getElementById(type+'-id').value,title,type:document.getElementById(type+'-type').value,priority:document.getElementById(type+'-priority').value,status,area:document.getElementById(type+'-area').value||'Not specified',discovered:isQA?document.getElementById(type+'-date').value:undefined,incident:!isQA?document.getElementById(type+'-date').value:undefined,discoveredBy:isQA?document.getElementById(type+'-by').value:undefined,reportedBy:!isQA?document.getElementById(type+'-by').value:undefined,injuryOccurred:!isQA?(document.getElementById(type+'-injury').value==='true'):undefined,desc:document.getElementById(type+'-desc').value||'',immediateAction:document.getElementById(type+'-immediate').value||'',rootCause:document.getElementById(type+'-root').value||'',corrective:document.getElementById(type+'-corrective').value||'',preventive:document.getElementById(type+'-preventive').value||'',linkedSOP:Array.from(sopSel.selectedOptions).map(o=>o.value),linkedSpec:Array.from(specSel.selectedOptions).map(o=>o.value),media:alertMediaFiles[type].map(f=>f.name),attachments:alertAttachFiles[type].map(f=>f.name)};
+  if(isQA)qualityAlerts.unshift(obj);else safetyAlerts.unshift(obj);
+  alertMediaFiles[type]=[];alertAttachFiles[type]=[];
+  navTop(type+'-lib',null);
+  showToast(`${obj.id} ${status==='Draft'?'saved as draft':'issued successfully'}`);
+}
+
+function renderApprovals(){
+  document.getElementById('at-sop-ct').textContent=`(${pendingSOP.length})`;
+  document.getElementById('at-ed-ct').textContent=`(${pendingED.length})`;
+  const list=apprTab==='sop'?pendingSOP:pendingED;
+  const type=apprTab;
+  let html=`<div class="panel"><div class="pt">Pending Sign-Off — ${type==='sop'?'SOPs':'Engineering Drawings'}</div>`;
+  if(!list.length)html+='<div style="text-align:center;padding:28px;font-size:12px;color:var(--cp-gray)"><i class="ti ti-circle-check" style="font-size:28px;display:block;margin-bottom:8px;color:var(--cp-green)"></i>All caught up!</div>';
+  else html+=list.map((a,i)=>`<div class="ai"><div style="flex:1"><div class="ait">${a.id} — ${a.title}</div><div class="aim">Rev ${a.ver} · ${a.type} · Submitted by ${a.submitter} · ${a.date}</div><div style="font-size:9px;color:var(--cp-gray);margin-top:3px;font-weight:700;text-transform:uppercase;letter-spacing:.04em">Workflow: ${a.wf}</div></div><div style="display:flex;gap:6px;flex-shrink:0"><button class="bs ap" onclick="approveDoc('${type}',${i})"><i class="ti ti-check"></i> Approve</button><button class="bs rj" onclick="rejectDoc('${type}',${i})"><i class="ti ti-x"></i> Reject</button></div></div>`).join('');
+  html+='</div>';
+  if(processedItems.length){html+='<div class="panel"><div class="pt">Recently Processed</div>'+processedItems.slice(0,5).map(p=>`<div class="ai"><div style="flex:1"><div class="ait">${p.id} — ${p.title}</div><div class="aim">${p.date}</div></div><span class="sp ${p.action==='Approved'?'s-act':'s-arc'}">${p.action}</span></div>`).join('')+'</div>';}
+  document.getElementById('appr-content').innerHTML=html;
+  const total=pendingSOP.length+pendingED.length;
+  document.getElementById('appr-count').textContent=total||'';
+  document.getElementById('sb-pending').textContent=total;
+}
+function approveDoc(type,i){
+  const list=type==='sop'?pendingSOP:pendingED;
+  const a=list[i];
+  const doc=(type==='sop'?sops:drawings).find(x=>x.id===a.id);
+  if(doc)doc.status='Active';
+  processedItems.unshift({id:a.id,title:a.title,action:'Approved',date:new Date().toISOString().slice(0,10)});
+  list.splice(i,1);renderApprovals();renderSOPs();renderDrawings();showToast(`${a.id} approved`);
+}
+function rejectDoc(type,i){
+  const list=type==='sop'?pendingSOP:pendingED;
+  const a=list[i];
+  processedItems.unshift({id:a.id,title:a.title,action:'Rejected',date:new Date().toISOString().slice(0,10)});
+  list.splice(i,1);renderApprovals();showToast(`${a.id} returned to author`);
+}
+function switchApprTab(tab,el){apprTab=tab;document.querySelectorAll('#view-approvals .tt').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderApprovals();}
+
+function renderVersions(){
+  const keys=Object.keys(versionData[verType]);
+  const sel=document.getElementById('doc-sel');
+  sel.innerHTML=keys.map(k=>`<option value="${k}">${k}</option>`).join('');
+  if(keys.length)loadVersions(keys[0]);
+}
+function switchVerType(t){verType=t;renderVersions();}
+function loadVersions(id){
+  const vd=(versionData[verType]||{})[id]||[];
+  document.getElementById('version-timeline').innerHTML=`<div class="pt">Revision Log — ${id}</div>`+(vd.length?vd.map(v=>`<div class="vi"><div class="vd ${v.cur?'cur':''}"></div><div style="flex:1"><span style="font-family:monospace;font-size:11px;font-weight:700">Rev ${v.ver}</span>${v.cur?'<span class="sp s-act" style="margin-left:7px">Current</span>':''}<div style="font-size:11px;color:var(--cp-navy);margin-top:3px">${v.desc}</div><div style="font-size:10px;color:var(--cp-gray);margin-top:2px">${v.who} · ${v.date}</div></div></div>`).join(''):'<div style="font-size:12px;color:var(--cp-gray)">No history available.</div>');
+}
+
+function renderWorkflows(){
+  const list=wfTab==='all'?workflows:workflows.filter(w=>w.applies===wfTab||w.applies==='both');
+  document.getElementById('wf-list').innerHTML=list.map((w)=>{
+    const ri=workflows.indexOf(w);
+    const tc=w.applies==='sop'?'#31708F':w.applies==='ed'?'#3C763D':'#5B3FA6';
+    const bg=w.applies==='sop'?'#D9EDF7':w.applies==='ed'?'#DFF0D8':'#F0E6FF';
+    return `<div class="wf-card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div><span class="wf-name">${w.name}</span><span style="font-size:9px;padding:2px 7px;border-radius:2px;font-weight:700;text-transform:uppercase;margin-left:8px;background:${bg};color:${tc}">${w.applies==='sop'?'SOPs':w.applies==='ed'?'Drawings':'SOPs & Drawings'}</span></div><div style="display:flex;gap:6px"><button class="bs" onclick="openWFModal(${ri})"><i class="ti ti-edit"></i> Edit</button><button class="bs rj" onclick="workflows.splice(${ri},1);renderWorkflows();showToast('Workflow deleted')"><i class="ti ti-trash"></i></button></div></div><div style="display:flex;align-items:center;flex-wrap:wrap;gap:0;margin-bottom:9px">${w.steps.map((s,si)=>`<div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:68px"><div class="wf-circle">${si+1}</div><div class="wf-lbl">${s}</div></div>${si<w.steps.length-1?'<div class="wf-line" style="margin-bottom:11px"></div>':''}`).join('')}</div><div style="font-size:10px;color:var(--cp-gray);font-weight:600">Min. approvers: ${w.min} · Escalate: ${w.esc?w.esc+' days':'disabled'} · Rejection notify: ${w.rej}</div></div>`;
+  }).join('');
+}
+function switchWFTab(tab,el){wfTab=tab;document.querySelectorAll('#view-wf-config .tt').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderWorkflows();}
+function openWFModal(ei){
+  wfSteps=ei!=null?[...workflows[ei].steps]:['Author submits','Reviewer checks','Approver sign-off'];
+  if(ei!=null){const w=workflows[ei];document.getElementById('wf-name').value=w.name;document.getElementById('wf-applies').value=w.applies;document.getElementById('wf-min').value=w.min;document.getElementById('wf-esc').value=w.esc;document.getElementById('wf-rej').value=w.rej;document.getElementById('modal-wf')._ei=ei;}
+  else{document.getElementById('wf-name').value='';document.getElementById('wf-applies').value='sop';document.getElementById('wf-min').value=2;document.getElementById('wf-esc').value=5;document.getElementById('wf-rej').value='Author only';document.getElementById('modal-wf')._ei=null;}
+  renderWFSteps();document.getElementById('modal-wf').classList.add('open');
+}
+function renderWFSteps(){document.getElementById('wf-steps-list').innerHTML=wfSteps.map((s,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div class="wf-circle" style="font-size:10px;width:24px;height:24px;flex-shrink:0">${i+1}</div><input type="text" value="${s}" oninput="wfSteps[${i}]=this.value" style="flex:1;font-size:12px;padding:6px 9px;border:1px solid var(--cp-border);border-radius:3px;background:var(--cp-bg);color:var(--cp-navy)">${wfSteps.length>2?`<button class="bs rj" onclick="wfSteps.splice(${i},1);renderWFSteps()" style="padding:3px 7px"><i class="ti ti-x"></i></button>`:''}</div>`).join('');}
+function addWFStep(){wfSteps.push('New step');renderWFSteps();}
+function saveWorkflow(){
+  const name=document.getElementById('wf-name').value.trim();
+  if(!name)return;
+  const w={name,applies:document.getElementById('wf-applies').value,min:parseInt(document.getElementById('wf-min').value),esc:parseInt(document.getElementById('wf-esc').value)||0,rej:document.getElementById('wf-rej').value,steps:[...wfSteps]};
+  const ei=document.getElementById('modal-wf')._ei;
+  if(ei!=null)workflows[ei]=w;else workflows.push(w);
+  closeMBg({target:document.getElementById('modal-wf')},'modal-wf');renderWorkflows();showToast(`Workflow "${name}" saved`);
+}
+
+function renderRoles(){document.getElementById('roles-list').innerHTML=roles.map(r=>`<div class="rl"><div class="rav" style="background:${r.bg};color:${r.tc}">${r.i}</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--cp-navy)">${r.n}</div><div style="font-size:10px;color:var(--cp-gray)">${r.d}</div></div><span class="rbadge ${r.r==='Admin'?'rb-admin':r.r==='Approver'?'rb-appr':r.r==='Author'?'rb-auth':'rb-view'}">${r.r}</span></div>`).join('');}
+
+function openNewSOP(){newDocType='sop';populateNewSOPModal();document.getElementById('modal-new').classList.add('open');}
+function openNewModal(){openNewSOP();}
+function populateNewSOPModal(){
+  pendingMedia=[];linkedSpecs=[];
+  document.getElementById('media-preview').innerHTML='';
+  document.getElementById('spec-link-list').innerHTML='';
+  document.getElementById('spec-picker').style.display='none';
+  document.getElementById('f-tmpl').innerHTML='<option value="">-- Start from scratch --</option>'+templates.map(t=>`<option value="${t.name}">${t.name}</option>`).join('');
+  ['f-id','f-title','f-desc','f-owner'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-ver').value='1.0.0';
+  document.getElementById('f-wf').innerHTML='<option value="">None (manual)</option>'+workflows.filter(w=>w.applies==='sop'||w.applies==='both').map(w=>`<option>${w.name}</option>`).join('');
+}
+function applyTemplate(name){
+  if(!name)return;
+  const t=templates.find(x=>x.name===name);if(!t){return;}
+  if(document.getElementById('f-wf'))document.getElementById('f-wf').value=t.wf||'';
+  linkedSpecs=[];t.defaultSpecs.forEach(s=>{if(!linkedSpecs.includes(s))linkedSpecs.push(s);});
+  renderLinkedSpecs();showToast('Template applied — specs and workflow loaded');
+}
+function renderLinkedSpecs(){document.getElementById('spec-link-list').innerHTML=linkedSpecs.map((sid,i)=>{const sp=specs.find(s=>s.id===sid);return `<div class="attach-item"><i class="ti ti-file-certificate" style="color:var(--cp-amber)"></i><span class="attach-name">${sid}${sp?' — '+sp.title.substring(0,36):''}</span><button class="attach-remove" onclick="linkedSpecs.splice(${i},1);renderLinkedSpecs()"><i class="ti ti-x"></i></button></div>`;}).join('');}
+function handleMedia(input){
+  Array.from(input.files).forEach(f=>pendingMedia.push(f));
+  document.getElementById('media-preview').innerHTML=pendingMedia.map(f=>f.type.startsWith('video')?`<div class="media-thumb-vid" title="${f.name}"><i class="ti ti-player-play"></i></div>`:`<div class="media-thumb-img" title="${f.name}"><i class="ti ti-photo"></i></div>`).join('');
+  input.value='';
+}
+function toggleSpecPicker(){
+  const p=document.getElementById('spec-picker');p.style.display=p.style.display==='none'?'':'none';
+  if(p.style.display!=='none'){document.getElementById('spec-picker-items').innerHTML=specs.map(s=>`<div class="lib-check-row"><input type="checkbox" id="spk-${s.id}" ${linkedSpecs.includes(s.id)?'checked':''} onchange="toggleLinkedSpec('${s.id}',this.checked)"><label for="spk-${s.id}" style="cursor:pointer;flex:1"><strong>${s.id}</strong> — ${s.title.substring(0,38)}</label></div>`).join('');}
+}
+function toggleLinkedSpec(id,checked){if(checked){if(!linkedSpecs.includes(id))linkedSpecs.push(id);}else linkedSpecs=linkedSpecs.filter(x=>x!==id);renderLinkedSpecs();}
+function createDoc(){
+  const title=document.getElementById('f-title').value.trim();
+  if(!title){showToast('Title is required');return;}
+  const obj={id:document.getElementById('f-id').value.trim()||`SOP-0${sops.length+1}`,title,desc:document.getElementById('f-desc').value.trim()||'No description.',ver:document.getElementById('f-ver').value.trim()||'1.0.0',status:document.getElementById('f-status').value,tags:[document.getElementById('f-tag').value],owner:document.getElementById('f-owner').value.trim()||'Unassigned',updated:new Date().toISOString().slice(0,10),specs:[...linkedSpecs],media:pendingMedia.map(f=>f.name)};
+  sops.unshift(obj);closeMBg({target:document.getElementById('modal-new')},'modal-new');renderSOPs();showToast(`${obj.id} created${pendingMedia.length?' with '+pendingMedia.length+' media file'+(pendingMedia.length>1?'s':''):''}`);
+}
+
+function openSpecModal(editIdx){
+  document.getElementById('lib-check-list').innerHTML=LIBS.map(l=>`<div class="lib-check-row"><input type="checkbox" id="lib-${l.replace(/\s+/g,'_')}" value="${l}"><label for="lib-${l.replace(/\s+/g,'_')}" style="cursor:pointer">${l}</label></div>`).join('');
+  if(editIdx!=null){const s=specs[editIdx];document.getElementById('sp-id').value=s.id;document.getElementById('sp-rev').value=s.rev;document.getElementById('sp-title').value=s.title;document.getElementById('sp-body').value=s.body;document.getElementById('sp-desc').value=s.desc;s.libs.forEach(l=>{const el=document.getElementById('lib-'+l.replace(/\s+/g,'_'));if(el)el.checked=true;});document.getElementById('modal-spec')._ei=editIdx;}
+  else{['sp-id','sp-rev','sp-title','sp-body','sp-desc'].forEach(id=>document.getElementById(id).value='');document.getElementById('modal-spec')._ei=null;}
+  document.getElementById('modal-spec').classList.add('open');
+}
+function saveSpec(){
+  const id=document.getElementById('sp-id').value.trim();const title=document.getElementById('sp-title').value.trim();
+  if(!id||!title){showToast('ID and Title are required');return;}
+  const libs=LIBS.filter(l=>{const el=document.getElementById('lib-'+l.replace(/\s+/g,'_'));return el&&el.checked;});
+  if(!libs.length){showToast('Select at least one library');return;}
+  const obj={id,title,body:document.getElementById('sp-body').value.trim(),rev:document.getElementById('sp-rev').value.trim(),desc:document.getElementById('sp-desc').value.trim(),libs};
+  const ei=document.getElementById('modal-spec')._ei;
+  if(ei!=null)specs[ei]=obj;else specs.push(obj);
+  closeMBg({target:document.getElementById('modal-spec')},'modal-spec');renderSpecs();showToast(`"${id}" saved`);
+}
+
+
+
+
+// ============================================================
+//  TRAINING DATA
+// ============================================================
+const trainingPlans=[
+  {id:'TP-001',name:'New Hire Safety Orientation',cat:'Safety',duration:'4 hrs',audience:'All new employees',sops:['SOP-001','SOP-002','SOP-004','SOP-009','SOP-010'],specs:['OSHA-1910.119','ISO-45001:2018'],desc:'Covers all mandatory safety topics required before employees begin work on the production floor.',objectives:['Understand chemical hazard identification','Demonstrate proper LOTO procedure','Identify all evacuation routes','Select correct PPE by zone']},
+  {id:'TP-002',name:'Forklift Operator Certification',cat:'Safety',duration:'8 hrs',audience:'Warehouse / Logistics staff',sops:['SOP-004'],specs:['OSHA-1910.178'],desc:'Full forklift operator certification per OSHA 1910.178. Includes classroom and practical assessment.',objectives:['Complete pre-shift inspection checklist','Safely navigate load through facility','Demonstrate proper load stacking','Pass written and practical assessment']},
+  {id:'TP-003',name:'Quality Inspector Onboarding',cat:'Quality',duration:'6 hrs',audience:'QA Team',sops:['SOP-003','SOP-005'],specs:['ISO-9001:2015','INT-QA-001'],desc:'Onboarding training for new quality inspection staff covering all inspection procedures and tools.',objectives:['Use calibrated gauges correctly','Complete inspection report forms','Handle non-conforming product per procedure','Understand accept/reject criteria']},
+  {id:'TP-004',name:'Maintenance Technician LOTO',cat:'Maintenance',duration:'3 hrs',audience:'Maintenance dept.',sops:['SOP-002','SOP-008'],specs:['OSHA-1910.119','INT-EHS-002'],desc:'Lockout/tagout and preventive maintenance procedures for all production equipment.',objectives:['Verify zero energy state','Complete PM checklist independently','Document maintenance activity correctly','Identify energy isolation points']},
+  {id:'TP-005',name:'Environmental Compliance Refresher',cat:'Onboarding',duration:'2 hrs',audience:'All plant staff',sops:['SOP-006','SOP-001'],specs:['EPA-40-CFR-264','ISO-14001:2015'],desc:'Annual refresher on waste water treatment, chemical storage, and environmental compliance.',objectives:['Identify regulated waste streams','Properly label and segregate waste','Report spills within required timeframe']},
+];
+
+let trainingPackages=[
+  {id:'PKG-001',name:'Q1 2026 New Hire Onboarding Package',status:'Active',audience:'New production floor hires',assignedTo:['Chen W.','Rodrigo T.','Lisa P.'],created:'2026-01-15',dueDate:'2026-03-31',plans:['TP-001','TP-003'],notes:'Mandatory package for all Q1 new hires. Must be completed before unsupervised work.',completions:{total:3,done:2},media:[],attachments:[]},
+  {id:'PKG-002',name:'Warehouse Safety Re-Certification 2026',status:'Active',audience:'Warehouse & Logistics team',assignedTo:['Floor Supervisor','Rodrigo T.'],created:'2026-02-10',dueDate:'2026-06-30',plans:['TP-002'],notes:'Annual OSHA-required recertification for all forklift operators.',completions:{total:4,done:1},media:[],attachments:[]},
+  {id:'PKG-003',name:'Maintenance Annual Compliance Package',status:'Draft',audience:'All maintenance technicians',assignedTo:['D. Okonkwo'],created:'2026-06-01',dueDate:'2026-09-30',plans:['TP-004','TP-005'],notes:'Draft — pending review by safety officer.',completions:{total:0,done:0},media:[],attachments:[]},
+];
+
+let trFilter='All';
+let pkgMediaFiles={},pkgAttachFiles={};
+
+function renderTraining(){
+  const el=document.getElementById('training-content');
+  let pkgs=trainingPackages;
+  if(trFilter==='Draft')pkgs=pkgs.filter(p=>p.status==='Draft');
+  else if(trFilter==='Active')pkgs=pkgs.filter(p=>p.status==='Active');
+  else if(trFilter==='Archived')pkgs=pkgs.filter(p=>p.status==='Archived');
+  else if(trFilter.startsWith('plan:')){
+    const cat=trFilter.split(':')[1];
+    pkgs=pkgs.filter(p=>p.plans.some(pid=>{const plan=trainingPlans.find(x=>x.id===pid);return plan&&plan.cat===cat;}));
+  }
+  const openCt=trainingPackages.filter(p=>p.status==='Active').length;
+  const draftCt=trainingPackages.filter(p=>p.status==='Draft').length;
+  const totalSops=new Set(trainingPackages.flatMap(p=>p.plans.flatMap(pid=>{const pl=trainingPlans.find(x=>x.id===pid);return pl?pl.sops:[]}))).size;
+  document.getElementById('tr-nav-ct').textContent=trainingPackages.length;
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <span style="font-size:13px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.04em"><i class="ti ti-school" style="margin-right:7px"></i>Training Packages</span>
+      <button class="btn" style="background:#7B5EA7;border-color:#7B5EA7;color:#fff" onclick="openNewPackage()"><i class="ti ti-plus"></i> New Package</button>
+    </div>
+    <div class="sg">
+      <div class="sc" style="border-top-color:#7B5EA7"><div class="sl">Total Packages</div><div class="sv">${trainingPackages.length}</div><div class="ss">${trainingPlans.length} training plans</div></div>
+      <div class="sc" style="border-top-color:#7B5EA7"><div class="sl">Active</div><div class="sv" style="color:#7B5EA7">${openCt}</div><div class="ss">in progress</div></div>
+      <div class="sc" style="border-top-color:#7B5EA7"><div class="sl">Drafts</div><div class="sv" style="color:var(--cp-amber)">${draftCt}</div><div class="ss">pending activation</div></div>
+      <div class="sc" style="border-top-color:#7B5EA7"><div class="sl">SOPs Covered</div><div class="sv" style="color:var(--cp-blue-active)">${totalSops}</div><div class="ss">unique procedures</div></div>
+    </div>
+    ${pkgs.length?pkgs.map((pkg,pi)=>{
+      const planObjs=pkg.plans.map(pid=>trainingPlans.find(x=>x.id===pid)).filter(Boolean);
+      const allSops=[...new Set(planObjs.flatMap(p=>p.sops))];
+      const pct=pkg.completions.total>0?Math.round((pkg.completions.done/pkg.completions.total)*100):0;
+      const ri=trainingPackages.indexOf(pkg);
+      return `<div class="tr-pkg-card">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:10px">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="font-family:monospace;font-size:10px;font-weight:700;color:#7B5EA7">${pkg.id}</span>
+              <span class="sp ${sc(pkg.status)}">${pkg.status}</span>
+              <span style="font-size:9px;color:var(--cp-gray)">Due: ${pkg.dueDate}</span>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--cp-navy);margin-top:4px">${pkg.name}</div>
+            <div style="font-size:10px;color:var(--cp-gray);margin-top:2px"><i class="ti ti-users" style="font-size:11px"></i> ${pkg.audience} &middot; Assigned to: ${pkg.assignedTo.join(', ')}</div>
+            ${pkg.notes?`<div style="font-size:10px;color:var(--cp-navy);margin-top:4px;padding:5px 8px;background:var(--cp-row-alt);border-radius:2px;border-left:2px solid #7B5EA7">${pkg.notes}</div>`:''}
+          </div>
+          <div style="display:flex;gap:5px;flex-shrink:0">
+            <button class="bs" onclick="editPackage(${ri})"><i class="ti ti-edit"></i> Edit</button>
+            <button class="bs rj" onclick="deletePackage(${ri})"><i class="ti ti-trash"></i></button>
+          </div>
+        </div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">Completion Progress</div>
+          <div style="display:flex;align-items:center;gap:9px">
+            <div class="progress-bar-bg" style="flex:1"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+            <span style="font-size:11px;font-weight:700;color:#7B5EA7;flex-shrink:0">${pkg.completions.done}/${pkg.completions.total} <span style="font-weight:400;color:var(--cp-gray)">completed (${pct}%)</span></span>
+          </div>
+        </div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Training Plans Included (${planObjs.length})</div>
+          ${planObjs.map(pl=>`<div style="border:1px solid var(--cp-border);border-radius:3px;padding:8px 10px;margin-bottom:5px;background:var(--cp-row-alt);display:flex;align-items:center;gap:9px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#F3E8FF;border:1px solid #CE93D8;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;color:#7B5EA7"><i class="ti ti-clipboard-list"></i></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11px;font-weight:700;color:var(--cp-navy)">${pl.id} &mdash; ${pl.name}</div>
+              <div style="font-size:10px;color:var(--cp-gray)">${pl.cat} &middot; ${pl.duration} &middot; ${pl.audience}</div>
+              <div style="margin-top:4px">${pl.sops.map(s=>`<span class="tr-sop-pill"><i class="ti ti-file-description" style="font-size:9px"></i> ${s}</span>`).join('')}</div>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          ${allSops.map(s=>`<span class="tag">${s}</span>`).join('')}
+          ${pkg.media.length?`<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;background:var(--cp-blue-lt);color:var(--cp-blue-active)"><i class="ti ti-photo" style="font-size:9px"></i> ${pkg.media.length} media</span>`:''}
+        </div>
+      </div>`;
+    }).join(''):'<div style="text-align:center;padding:36px;font-size:12px;color:var(--cp-gray)"><i class="ti ti-school" style="font-size:30px;display:block;margin-bottom:9px"></i>No training packages found</div>'}
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--cp-border)">
+      <div style="font-size:11px;font-weight:700;color:var(--cp-navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em"><i class="ti ti-clipboard-list" style="margin-right:5px"></i>Available Training Plans Library</div>
+      ${trainingPlans.map((pl,pli)=>`<div class="tr-plan-card">
+        <div style="width:30px;height:30px;border-radius:50%;background:#F3E8FF;border:1px solid #CE93D8;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:#7B5EA7"><i class="ti ti-clipboard-list"></i></div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+            <span style="font-family:monospace;font-size:10px;font-weight:700;color:#7B5EA7">${pl.id}</span>
+            <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:2px;background:#F3E8FF;color:#5B3FA6;border:1px solid #CE93D8;text-transform:uppercase">${pl.cat}</span>
+            <span style="font-size:10px;color:var(--cp-gray)">${pl.duration} &middot; ${pl.audience}</span>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--cp-navy);margin-top:3px">${pl.name}</div>
+          <div style="font-size:10px;color:var(--cp-gray);margin-top:2px">${pl.desc}</div>
+          <div style="margin-top:5px">${pl.sops.map(s=>`<span class="tr-sop-pill"><i class="ti ti-file-description" style="font-size:9px"></i> ${s}</span>`).join('')}${pl.specs.map(s=>`<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;background:#FFF3E0;color:#8A4500;border:1px solid #FFCC80;margin:2px">${s}</span>`).join('')}</div>
+          <div style="margin-top:5px"><strong style="font-size:9px;color:var(--cp-gray)">OBJECTIVES:</strong> ${pl.objectives.map(o=>`<span style="font-size:10px;color:var(--cp-navy);margin-right:8px">&#10003; ${o}</span>`).join('')}</div>
+        </div>
+        <button class="btn" style="flex-shrink:0;background:#7B5EA7;border-color:#7B5EA7;color:#fff;font-size:9px" onclick="addPlanToNewPackage('${pl.id}')"><i class="ti ti-plus"></i> Add to Package</button>
+      </div>`).join('')}
+    </div>`;
+}
+
+function filterTraining(f,el){
+  trFilter=f;
+  document.querySelectorAll('#sb-training .sni').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderTraining();
+}
+
+function openNewPackage(editIdx){
+  const isEdit=editIdx!=null;
+  const pkg=isEdit?trainingPackages[editIdx]:{id:`PKG-00${trainingPackages.length+1}`,name:'',status:'Draft',audience:'',assignedTo:[],created:new Date().toISOString().slice(0,10),dueDate:'',plans:[],notes:'',completions:{total:0,done:0},media:[],attachments:[]};
+  pkgMediaFiles[editIdx??'new']=[];pkgAttachFiles[editIdx??'new']=[];
+  const selectedPlans=isEdit?[...pkg.plans]:[];
+  const key=editIdx??'new';
+
+  // Build modal HTML inline
+  const modalHtml=`
+  <div class="modal-bg open" id="modal-pkg" onclick="if(event.target===this)closePkgModal()">
+    <div class="modal" style="width:640px;border-top-color:#7B5EA7">
+      <h2><i class="ti ti-school" style="margin-right:6px;color:#7B5EA7"></i>${isEdit?'Edit Training Package':'Create Training Package'}</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg"><label>Package ID</label><input type="text" id="pkg-id" value="${pkg.id}" readonly style="font-weight:700;font-family:monospace;background:var(--cp-white)"></div>
+        <div class="fg"><label>Status</label><select id="pkg-status"><option ${pkg.status==='Draft'?'selected':''}>Draft</option><option ${pkg.status==='Active'?'selected':''}>Active</option><option ${pkg.status==='Archived'?'selected':''}>Archived</option></select></div>
+      </div>
+      <div class="fg"><label>Package Name *</label><input type="text" id="pkg-name" value="${pkg.name}" placeholder="e.g. Q2 2026 Safety Refresher Package"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg"><label>Target Audience</label><input type="text" id="pkg-audience" value="${pkg.audience}" placeholder="e.g. All production floor staff"></div>
+        <div class="fg"><label>Due Date</label><input type="date" id="pkg-due" value="${pkg.dueDate||''}"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg"><label>Assigned To (names, comma-sep)</label><input type="text" id="pkg-assigned" value="${pkg.assignedTo.join(', ')}" placeholder="e.g. Chen W., D. Okonkwo"></div>
+        <div class="fg"><label>Completions (done / total)</label><div style="display:flex;gap:7px"><input type="number" id="pkg-done" value="${pkg.completions.done}" min="0" style="width:60px"><span style="align-self:center;color:var(--cp-gray)">/</span><input type="number" id="pkg-total" value="${pkg.completions.total}" min="0" style="width:60px"></div></div>
+      </div>
+      <div class="fg"><label>Notes / Instructions</label><textarea id="pkg-notes" style="height:48px" placeholder="Any special instructions or context for this package…">${pkg.notes}</textarea></div>
+
+      <div style="font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;padding:8px 0 6px;border-top:1px solid var(--cp-border);margin-top:4px">
+        <i class="ti ti-clipboard-list" style="color:#7B5EA7;margin-right:4px"></i>Select Training Plans to Include
+      </div>
+      <div id="pkg-plan-list" style="max-height:260px;overflow-y:auto;border:1px solid var(--cp-border);border-radius:3px;padding:6px;background:var(--cp-bg)">
+        ${trainingPlans.map(pl=>{
+          const isSel=selectedPlans.includes(pl.id);
+          return `<div class="tr-plan-card ${isSel?'selected':''}" id="plancard-${pl.id}" onclick="togglePlanSelect('${pl.id}',this)" style="margin-bottom:5px;user-select:none">
+            <div style="flex-shrink:0;margin-top:1px">
+              <div style="width:18px;height:18px;border-radius:3px;border:2px solid ${isSel?'#7B5EA7':'var(--cp-border)'};background:${isSel?'#7B5EA7':'transparent'};display:flex;align-items:center;justify-content:center" id="plancheck-${pl.id}">
+                ${isSel?'<i class="ti ti-check" style="color:#fff;font-size:11px"></i>':''}
+              </div>
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11px;font-weight:700;color:var(--cp-navy)">${pl.id} &mdash; ${pl.name}</div>
+              <div style="font-size:10px;color:var(--cp-gray)">${pl.cat} &middot; ${pl.duration} &middot; ${pl.audience}</div>
+              <div style="font-size:10px;color:var(--cp-navy);margin-top:2px">${pl.desc.substring(0,80)}…</div>
+              <div style="margin-top:4px">${pl.sops.map(s=>`<span class="tr-sop-pill" style="font-size:8px">${s}</span>`).join('')}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div id="pkg-selected-summary" style="margin-top:6px;font-size:10px;color:#7B5EA7;font-weight:600;min-height:18px"></div>
+
+      <div style="font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.08em;padding:8px 0 4px;border-top:1px solid var(--cp-border);margin-top:8px">
+        <i class="ti ti-photo-video" style="color:#7B5EA7;margin-right:4px"></i>Supporting Materials
+      </div>
+      <div class="file-drop" onclick="document.getElementById('pkg-media-inp').click()" style="padding:10px;border-color:#CE93D8">
+        <i class="ti ti-cloud-upload" style="font-size:16px;display:block;margin-bottom:2px;color:#7B5EA7"></i>
+        Upload training media (photos, videos, PDFs)
+      </div>
+      <input type="file" id="pkg-media-inp" style="display:none" multiple accept="image/*,video/*,.pdf" onchange="handlePkgMedia(this,'${key}')">
+      <div id="pkg-media-preview-${key}" class="media-row"></div>
+
+      <div class="mf">
+        <button class="btn" onclick="closePkgModal()">Cancel</button>
+        <button class="btn" style="background:#7B5EA7;border-color:#7B5EA7;color:#fff" onclick="savePackage(${editIdx??null})"><i class="ti ti-check"></i> ${isEdit?'Update Package':'Create Package'}</button>
+      </div>
+    </div>
+  </div>`;
+
+  // Mount modal
+  let old=document.getElementById('modal-pkg');
+  if(old)old.remove();
+  const div=document.createElement('div');
+  div.innerHTML=modalHtml;
+  document.body.appendChild(div.firstElementChild);
+  updatePlanSummary();
+}
+
+let _selectedPlans=[];
+function togglePlanSelect(id,card){
+  const check=document.getElementById('plancheck-'+id);
+  if(_selectedPlans.includes(id)){
+    _selectedPlans=_selectedPlans.filter(x=>x!==id);
+    card.classList.remove('selected');
+    check.style.background='transparent';check.style.borderColor='var(--cp-border)';check.innerHTML='';
+  } else {
+    _selectedPlans.push(id);
+    card.classList.add('selected');
+    check.style.background='#7B5EA7';check.style.borderColor='#7B5EA7';check.innerHTML='<i class="ti ti-check" style="color:#fff;font-size:11px"></i>';
+  }
+  updatePlanSummary();
+}
+function updatePlanSummary(){
+  const el=document.getElementById('pkg-selected-summary');
+  if(!el)return;
+  if(_selectedPlans.length===0){el.textContent='No plans selected yet — click plans above to include them.';return;}
+  const totalSops=new Set(_selectedPlans.flatMap(pid=>{const pl=trainingPlans.find(x=>x.id===pid);return pl?pl.sops:[];})).size;
+  const totalDur=_selectedPlans.reduce((s,pid)=>{const pl=trainingPlans.find(x=>x.id===pid);if(!pl)return s;const h=parseFloat(pl.duration);return s+(isNaN(h)?0:h);},0);
+  el.innerHTML=`<i class="ti ti-circle-check" style="color:#7B5EA7"></i> ${_selectedPlans.length} plan${_selectedPlans.length>1?'s':''} selected &middot; ${totalSops} unique SOPs &middot; ~${totalDur} hrs total training time`;
+}
+function addPlanToNewPackage(planId){
+  openNewPackage();
+  setTimeout(()=>{
+    const card=document.getElementById('plancard-'+planId);
+    if(card&&!_selectedPlans.includes(planId)){togglePlanSelect(planId,card);}
+  },100);
+}
+function handlePkgMedia(input,key){
+  if(!pkgMediaFiles[key])pkgMediaFiles[key]=[];
+  Array.from(input.files).forEach(f=>pkgMediaFiles[key].push(f));
+  const el=document.getElementById('pkg-media-preview-'+key);
+  if(el)el.innerHTML=pkgMediaFiles[key].map(f=>f.type.startsWith('video')?`<div class="media-thumb-vid" title="${f.name}"><i class="ti ti-player-play"></i></div>`:`<div class="media-thumb-img" title="${f.name}"><i class="ti ti-photo"></i></div>`).join('');
+  input.value='';
+}
+function closePkgModal(){const m=document.getElementById('modal-pkg');if(m)m.remove();_selectedPlans=[];}
+function savePackage(editIdx){
+  const name=document.getElementById('pkg-name').value.trim();
+  if(!name){showToast('Package name is required');return;}
+  if(_selectedPlans.length===0){showToast('Select at least one training plan');return;}
+  const assigned=document.getElementById('pkg-assigned').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const obj={
+    id:document.getElementById('pkg-id').value,
+    name,
+    status:document.getElementById('pkg-status').value,
+    audience:document.getElementById('pkg-audience').value||'All staff',
+    assignedTo:assigned,
+    created:editIdx!=null?trainingPackages[editIdx].created:new Date().toISOString().slice(0,10),
+    dueDate:document.getElementById('pkg-due').value||'TBD',
+    plans:[..._selectedPlans],
+    notes:document.getElementById('pkg-notes').value,
+    completions:{done:parseInt(document.getElementById('pkg-done').value)||0,total:parseInt(document.getElementById('pkg-total').value)||0},
+    media:(pkgMediaFiles[editIdx??'new']||[]).map(f=>f.name),
+    attachments:[],
+  };
+  if(editIdx!=null)trainingPackages[editIdx]=obj;else trainingPackages.unshift(obj);
+  closePkgModal();
+  renderTraining();
+  showToast(`${obj.id} ${editIdx!=null?'updated':'created'} — ${_selectedPlans.length} plan${_selectedPlans.length>1?'s':''} included`);
+  _selectedPlans=[];
+}
+function editPackage(i){
+  _selectedPlans=[...trainingPackages[i].plans];
+  openNewPackage(i);
+}
+function deletePackage(i){trainingPackages.splice(i,1);renderTraining();showToast('Package deleted');}
+
+function setSidebar(view){
+  ['sb-sop','sb-ed','sb-specs','sb-tmpl','sb-qa','sb-sa','sb-other','sb-training'].forEach(id=>document.getElementById(id).style.display='none');
+  const map={'sop-lib':'sb-sop','ed-lib':'sb-ed',specs:'sb-specs',templates:'sb-tmpl','qa-lib':'sb-qa','qa-new':'sb-qa','sa-lib':'sb-sa','sa-new':'sb-sa',training:'sb-training'};
+  document.getElementById(map[view]||'sb-other').style.display='';
+}
+function navTop(view,el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const vEl=document.getElementById('view-'+view);if(vEl)vEl.classList.add('active');
+  if(el)el.classList.add('active');
+  sopStatusFilter=null;edStatusFilter=null;
+  setSidebar(view);
+  const hideNew=['specs','templates','qa-lib','qa-new','sa-lib','sa-new'].includes(view);
+  document.getElementById('spec-btn').style.display=view==='specs'?'':'none';
+  document.getElementById('tmpl-btn').style.display=view==='templates'?'':'none';
+  document.getElementById('new-btn').style.display=hideNew?'none':'';
+  if(view==='sop-lib'){newDocType='sop';document.getElementById('new-btn-lbl').textContent='New SOP';renderSOPs();}
+  else if(view==='ed-lib'){newDocType='ed';document.getElementById('new-btn-lbl').textContent='New Drawing';renderDrawings();}
+  else if(view==='specs')renderSpecs();
+  else if(view==='templates'){tmplFilter='All';renderTemplates();}
+  else if(view==='qa-lib')renderAlerts('qa');
+  else if(view==='sa-lib')renderAlerts('sa');
+  else if(view==='qa-new')buildAlertForm('qa');
+  else if(view==='sa-new')buildAlertForm('sa');
+  else if(view==='approvals')renderApprovals();
+  else if(view==='versions')renderVersions();
+  else if(view==='wf-config')renderWorkflows();
+  else if(view==='roles')renderRoles();
+  else if(view==='training'){document.getElementById('new-btn').style.display='none';renderTraining();}
+}
+function filterNavStatus(status,type,el){
+  document.querySelectorAll('.sni').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  if(type==='sop'){sopStatusFilter=status;document.getElementById('view-sop-lib').classList.add('active');document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));document.querySelector('.ni').classList.add('active');setSidebar('sop-lib');renderSOPs();}
+  else{edStatusFilter=status;document.getElementById('view-ed-lib').classList.add('active');setSidebar('ed-lib');renderDrawings();}
+}
+function filterTag(tag,el,type){
+  if(type==='sop'){sopTag=tag;document.querySelectorAll('#sop-chips .chip').forEach(c=>c.classList.remove('active'));}
+  else{edTag=tag;document.querySelectorAll('#ed-chips .chip').forEach(c=>c.classList.remove('active'));}
+  if(el)el.classList.add('active');
+  if(type==='sop')renderSOPs();else renderDrawings();
+}
+function filterSpecLib(lib,el){specLibFilter=lib;document.querySelectorAll('#sb-specs .sni').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');renderSpecs();}
+// filterTmpl now inside new template JS block above
+function handleSearch(q){searchQ=q.toLowerCase();renderSOPs();renderDrawings();renderSpecs();}
+function closeMBg(e,id){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');}
+
+let toastTimer;
+function showToast(msg){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3000);}
+
+setSidebar('sop-lib');
+document.getElementById('spec-btn').style.display='none';
+document.getElementById('tmpl-btn').style.display='none';
+renderSOPs();
+</script>
+</body>
+</html>
