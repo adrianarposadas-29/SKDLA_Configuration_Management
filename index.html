@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearPath Operating System — Spectrum Killian Application Suite</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.5.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+:root{
+  --cp-bg:#EEF3F8;--cp-white:#fff;--cp-navy:#1A2B4A;--cp-blue:#4A7DB5;
+  --cp-blue-hdr:#5B9BD5;--cp-blue-active:#3A6EA8;--cp-blue-lt:#D6E8F7;
+  --cp-orange:#E87722;--cp-green:#5CB85C;--cp-red:#D9534F;--cp-amber:#C8922A;
+  --cp-gray:#8A9BB0;--cp-border:#C5D3E0;--cp-row-alt:#F5F8FC;
+}
+html,body{min-height:100%;background:var(--cp-bg);color:var(--cp-navy)}
+
+/* ── HEADER ── */
+.cp-header{
+  background:var(--cp-white);border-bottom:2px solid var(--cp-blue-lt);
+  padding:14px 32px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 1px 6px rgba(26,43,74,.09);position:sticky;top:0;z-index:50
+}
+.cp-logo{display:flex;align-items:center;gap:12px}
+.cp-logo-mark{display:flex;flex-direction:column}
+.cp-logo-icon{display:flex;align-items:center;gap:8px}
+.cp-logo-icon span{font-size:20px;font-weight:700;color:var(--cp-navy);letter-spacing:-.4px}
+.cp-logo-sub{font-size:8px;font-weight:700;color:var(--cp-orange);text-transform:uppercase;letter-spacing:.16em;margin-top:2px;padding-left:33px}
+.cp-divider{width:1px;height:38px;background:var(--cp-border)}
+.cp-header-title{font-size:17px;font-weight:700;color:var(--cp-navy)}
+.cp-header-sub{font-size:10px;color:var(--cp-gray);margin-top:2px}
+.cp-sk{display:flex;align-items:center;gap:10px}
+.cp-sk-text p{font-size:12px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.08em;line-height:1.3;text-align:right}
+.cp-sk-text span{font-size:9px;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.05em}
+
+/* ── HERO BAND ── */
+.hero{
+  background:linear-gradient(135deg,var(--cp-navy) 0%,#2A4A7A 60%,#3A6EA8 100%);
+  padding:48px 32px 52px;color:#fff;position:relative;overflow:hidden
+}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.hero-inner{position:relative;max-width:900px;margin:0 auto}
+.hero-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.55);margin-bottom:10px}
+.hero h1{font-size:32px;font-weight:700;line-height:1.15;margin-bottom:12px;letter-spacing:-.5px}
+.hero h1 em{color:#7EB8F7;font-style:normal}
+.hero p{font-size:14px;color:rgba(255,255,255,.75);max-width:560px;line-height:1.7;margin-bottom:28px}
+.hero-chips{display:flex;gap:10px;flex-wrap:wrap}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);font-size:11px;font-weight:600;color:rgba(255,255,255,.85)}
+.hero-chip i{font-size:13px}
+.hero-deco{position:absolute;right:0;top:0;bottom:0;display:flex;align-items:center;padding-right:32px;opacity:.15}
+
+/* ── LAYOUT ── */
+.page{max-width:1100px;margin:0 auto;padding:36px 32px 64px}
+
+/* ── SECTION LABEL ── */
+.sec-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cp-gray);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--cp-border)}
+
+/* ── APP GRID ── */
+.app-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:40px}
+@media(max-width:820px){.app-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.app-grid{grid-template-columns:1fr}}
+
+/* ── APP CARD ── */
+.app-card{
+  background:var(--cp-white);border:1px solid var(--cp-border);border-radius:6px;
+  padding:20px;display:flex;flex-direction:column;gap:12px;
+  border-top:3px solid var(--cp-blue-hdr);
+  transition:box-shadow .18s,transform .18s;cursor:pointer;text-decoration:none;color:inherit
+}
+.app-card:hover{box-shadow:0 6px 24px rgba(26,43,74,.12);transform:translateY(-2px)}
+.app-card.featured{border-top-color:var(--cp-orange);grid-column:span 2}
+@media(max-width:540px){.app-card.featured{grid-column:span 1}}
+.app-card-icon{width:44px;height:44px;border-radius:8px;background:var(--cp-blue-lt);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--cp-blue-active);flex-shrink:0}
+.app-card-icon.orange{background:#FFF0E5;color:var(--cp-orange)}
+.app-card-icon.green{background:#E8F5E9;color:#2E7D32}
+.app-card-icon.amber{background:#FFF8E1;color:#C8922A}
+.app-card-icon.purple{background:#F3E8FF;color:#5B3FA6}
+.app-card-icon.red{background:#FFEBEE;color:#B71C1C}
+.app-card-icon.teal{background:#E0F7FA;color:#00695C}
+.app-card-hdr{display:flex;align-items:flex-start;gap:12px}
+.app-card-meta{flex:1}
+.app-card-title{font-size:14px;font-weight:700;color:var(--cp-navy);margin-bottom:3px}
+.app-card-sub{font-size:10px;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.app-card-desc{font-size:12px;color:var(--cp-gray);line-height:1.6;flex:1}
+.app-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--cp-border)}
+.app-card-tags{display:flex;gap:5px;flex-wrap:wrap}
+.app-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:2px;background:var(--cp-blue-lt);color:var(--cp-blue-active);border:1px solid #B8D4EE;text-transform:uppercase}
+.app-tag.orange{background:#FFF0E5;color:var(--cp-orange);border-color:#FFD0B0}
+.app-tag.green{background:#E8F5E9;color:#2E7D32;border-color:#A5D6A7}
+.app-tag.amber{background:#FFF8E1;color:#C8922A;border-color:#FFE082}
+.app-tag.purple{background:#F3E8FF;color:#5B3FA6;border-color:#CE93D8}
+.app-tag.red{background:#FFEBEE;color:#B71C1C;border-color:#EF9A9A}
+.app-launch{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--cp-blue-active);text-decoration:none}
+.app-launch:hover{color:var(--cp-blue)}
+.app-launch i{font-size:13px}
+.app-status{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px}
+.status-live{background:#DFF0D8;color:#3C763D}
+.status-beta{background:#FCF8E3;color:#8A6D3B;border:1px solid #FAEBCC}
+.status-wip{background:#F5F5F5;color:var(--cp-gray);border:1px solid var(--cp-border)}
+
+/* ── FEATURED CARD extras ── */
+.featured-body{display:flex;gap:24px;align-items:flex-start}
+.featured-modules{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.feat-mod{display:flex;align-items:center;gap:7px;padding:6px 9px;background:var(--cp-row-alt);border-radius:3px;border:1px solid var(--cp-border);font-size:11px;color:var(--cp-navy);font-weight:600}
+.feat-mod i{font-size:13px;color:var(--cp-blue-active)}
+
+/* ── STATS STRIP ── */
+.stats-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--cp-border);border:1px solid var(--cp-border);border-radius:6px;overflow:hidden;margin-bottom:40px}
+.stat-cell{background:var(--cp-white);padding:16px 14px;text-align:center}
+.stat-num{font-size:26px;font-weight:700;color:var(--cp-navy);line-height:1}
+.stat-lbl{font-size:9px;font-weight:700;color:var(--cp-gray);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+.stat-sub{font-size:10px;color:var(--cp-gray);margin-top:2px}
+
+/* ── QUICK LINKS ── */
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px}
+@media(max-width:700px){.quick-grid{grid-template-columns:1fr 1fr}}
+.quick-card{background:var(--cp-white);border:1px solid var(--cp-border);border-radius:4px;padding:14px;display:flex;align-items:center;gap:11px;cursor:pointer;text-decoration:none;color:inherit;transition:background .12s}
+.quick-card:hover{background:var(--cp-blue-lt)}
+.quick-card i{font-size:20px;color:var(--cp-blue-active);flex-shrink:0}
+.quick-title{font-size:12px;font-weight:700;color:var(--cp-navy)}
+.quick-sub{font-size:10px;color:var(--cp-gray);margin-top:1px}
+
+/* ── CHANGELOG ── */
+.changelog{background:var(--cp-white);border:1px solid var(--cp-border);border-radius:6px;padding:18px 20px;margin-bottom:40px}
+.changelog-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--cp-border)}
+.changelog-hdr span{font-size:12px;font-weight:700;color:var(--cp-navy);text-transform:uppercase;letter-spacing:.05em}
+.cl-entry{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--cp-border)}
+.cl-entry:last-child{border-bottom:none;padding-bottom:0}
+.cl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.cl-dot.feat{background:var(--cp-blue-active)}
+.cl-dot.fix{background:var(--cp-green)}
+.cl-dot.new{background:var(--cp-orange)}
+.cl-dot.breaking{background:var(--cp-red)}
+.cl-type{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px;text-transform:uppercase;flex-shrink:0;margin-top:1px}
+.cl-feat{background:var(--cp-blue-lt);color:var(--cp-blue-active)}
+.cl-new{background:#FFF0E5;color:var(--cp-orange)}
+.cl-fix{background:#DFF0D8;color:#3C763D}
+.cl-date{font-size:10px;color:var(--cp-gray);margin-left:auto;flex-shrink:0;margin-top:2px;white-space:nowrap}
+.cl-msg{font-size:11px;color:var(--cp-navy);line-height:1.5;flex:1}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--cp-border);padding:22px 32px;background:var(--cp-white);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-left{font-size:11px;color:var(--cp-gray)}
+.footer-left strong{color:var(--cp-navy)}
+.footer-links{display:flex;gap:18px}
+.footer-links a{font-size:11px;color:var(--cp-gray);text-decoration:none;font-weight:600}
+.footer-links a:hover{color:var(--cp-blue-active)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="cp-header">
+  <div class="cp-logo">
+    <div class="cp-logo-mark">
+      <div class="cp-logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M14 3C8 3 3 8 3 14s5 11 11 11 11-5 11-11S20 3 14 3z" fill="#1A2B4A" opacity=".12"/>
+          <circle cx="14" cy="14" r="8" fill="none" stroke="#1A2B4A" stroke-width="1.5"/>
+          <path d="M10 14l3 3 5-6" stroke="#4A7DB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>ClearPath</span>
+      </div>
+      <div class="cp-logo-sub">Operating System</div>
+    </div>
+    <div class="cp-divider"></div>
+    <div>
+      <div class="cp-header-title">Application Suite</div>
+      <div class="cp-header-sub">Spectrum Killian &mdash; Manufacturing Operations</div>
+    </div>
+  </div>
+  <div class="cp-sk">
+    <div>
+      <div style="font-size:10px;color:var(--cp-gray);text-align:right;margin-bottom:2px">Repository</div>
+      <code style="font-size:11px;background:var(--cp-row-alt);border:1px solid var(--cp-border);padding:3px 9px;border-radius:3px;color:var(--cp-navy);font-weight:600">spectrum-killian / clearpath-os</code>
+    </div>
+    <svg width="42" height="42" viewBox="0 0 36 36" fill="none">
+      <rect width="36" height="36" rx="5" fill="#EEF3F8"/>
+      <path d="M18 5l8 6.5v7L18 25l-8-6.5v-7z" fill="#4A7DB5" opacity=".25"/>
+      <path d="M18 5l8 6.5v7L18 25l-8-6.5v-7z" fill="none" stroke="#3A6EA8" stroke-width="1.2"/>
+      <path d="M18 9l5 4v5l-5 4-5-4v-5z" fill="#3A6EA8"/>
+    </svg>
+    <div class="cp-sk-text"><p>Spectrum</p><p>Killian</p><span>ClearPath OS</span></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-deco">
+    <svg width="320" height="220" viewBox="0 0 320 220" fill="none">
+      <circle cx="280" cy="80" r="120" fill="white" fill-opacity="0.04"/>
+      <circle cx="280" cy="80" r="80" fill="white" fill-opacity="0.04"/>
+      <circle cx="280" cy="80" r="40" fill="white" fill-opacity="0.06"/>
+      <path d="M160 80l40 30v40L160 170l-40-20V110z" fill="white" fill-opacity="0.05" stroke="white" stroke-opacity="0.12" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Spectrum Killian &mdash; ClearPath Operating System</div>
+    <h1>Manufacturing Operations<br><em>Application Suite</em></h1>
+    <p>A collection of integrated web applications built on the ClearPath Operating System design framework. Each module is a standalone HTML file — no installation, no dependencies, drop into any browser or repository.</p>
+    <div class="hero-chips">
+      <div class="hero-chip"><i class="ti ti-file-code"></i> Standalone HTML</div>
+      <div class="hero-chip"><i class="ti ti-device-desktop"></i> No Installation</div>
+      <div class="hero-chip"><i class="ti ti-brand-github"></i> GitHub Ready</div>
+      <div class="hero-chip"><i class="ti ti-lock"></i> In-Memory Data</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip" style="margin-top:32px">
+    <div class="stat-cell">
+      <div class="stat-num">2</div>
+      <div class="stat-lbl">Applications</div>
+      <div class="stat-sub">in this suite</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num" style="color:var(--cp-blue-active)">14</div>
+      <div class="stat-lbl">Feature Modules</div>
+      <div class="stat-sub">across all apps</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num" style="color:var(--cp-green)">0</div>
+      <div class="stat-lbl">Dependencies</div>
+      <div class="stat-sub">pure HTML/CSS/JS</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num" style="color:var(--cp-orange)">1</div>
+      <div class="stat-lbl">CDN Link</div>
+      <div class="stat-sub">Tabler Icons only</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num" style="color:#5B3FA6">∞</div>
+      <div class="stat-lbl">Browser Support</div>
+      <div class="stat-sub">any modern browser</div>
+    </div>
+  </div>
+
+  <!-- APPLICATIONS -->
+  <div class="sec-label"><i class="ti ti-apps" style="font-size:12px"></i> Applications</div>
+  <div class="app-grid">
+
+    <!-- DOCCONFIG — FEATURED -->
+    <a href="docconfig.html" class="app-card featured" style="text-decoration:none;color:inherit">
+      <div class="app-card-hdr">
+        <div class="app-card-icon orange"><i class="ti ti-file-description"></i></div>
+        <div class="app-card-meta">
+          <div class="app-card-title">DocConfig &mdash; Document Configuration Management</div>
+          <div class="app-card-sub">Manufacturing Operations &middot; SOPs &amp; Drawings</div>
+        </div>
+        <span class="app-status status-live"><i class="ti ti-circle-filled" style="font-size:7px"></i> Live</span>
+      </div>
+      <div class="app-card-desc" style="font-size:12px;color:var(--cp-gray);line-height:1.65">
+        Full-featured document control system covering SOPs, engineering drawings, reference specifications, revision-controlled templates, quality alerts, safety alerts, approval workflows, training packages, and team role management. All data is in-memory with no backend required.
+      </div>
+      <div class="featured-modules">
+        <div class="feat-mod"><i class="ti ti-file-description"></i> SOP Library</div>
+        <div class="feat-mod"><i class="ti ti-blueprint"></i> Engineering Drawings</div>
+        <div class="feat-mod"><i class="ti ti-books"></i> Reference Specifications</div>
+        <div class="feat-mod"><i class="ti ti-template"></i> Revision-Controlled Templates</div>
+        <div class="feat-mod"><i class="ti ti-checkbox"></i> Quality Alerts</div>
+        <div class="feat-mod"><i class="ti ti-alert-triangle"></i> Safety Alerts</div>
+        <div class="feat-mod"><i class="ti ti-checks"></i> Approval Workflows</div>
+        <div class="feat-mod"><i class="ti ti-school"></i> Training Packages</div>
+      </div>
+      <div class="app-card-footer">
+        <div class="app-card-tags">
+          <span class="app-tag orange">SOPs</span>
+          <span class="app-tag">Drawings</span>
+          <span class="app-tag green">Quality</span>
+          <span class="app-tag red">Safety</span>
+          <span class="app-tag purple">Training</span>
+        </div>
+        <span class="app-launch">Open App <i class="ti ti-arrow-right"></i></span>
+      </div>
+    </a>
+
+    <!-- DAILY PERFORMANCE -->
+    <div class="app-card" style="opacity:.75">
+      <div class="app-card-hdr">
+        <div class="app-card-icon green"><i class="ti ti-chart-bar"></i></div>
+        <div class="app-card-meta">
+          <div class="app-card-title">Daily Performance Management</div>
+          <div class="app-card-sub">Tier 1 &middot; Production Floor</div>
+        </div>
+        <span class="app-status status-wip"><i class="ti ti-clock" style="font-size:9px"></i> Coming Soon</span>
+      </div>
+      <div class="app-card-desc">
+        Hourly case entry, target tracking, operator leaderboards, hot-list management, and shift-end performance reporting. Mirrors the Tier 1 dashboard visible on the production floor.
+      </div>
+      <div class="app-card-footer">
+        <div class="app-card-tags">
+          <span class="app-tag green">Production</span>
+          <span class="app-tag">Tier 1</span>
+          <span class="app-tag amber">KPIs</span>
+        </div>
+        <span style="font-size:10px;color:var(--cp-gray);font-weight:600">Not yet available</span>
+      </div>
+    </div>
+
+    <!-- PLACEHOLDER 3 -->
+    <div class="app-card" style="opacity:.55;border-style:dashed">
+      <div class="app-card-hdr">
+        <div class="app-card-icon" style="background:var(--cp-row-alt)"><i class="ti ti-plus" style="color:var(--cp-gray)"></i></div>
+        <div class="app-card-meta">
+          <div class="app-card-title" style="color:var(--cp-gray)">New Module</div>
+          <div class="app-card-sub">Planned &middot; ClearPath OS</div>
+        </div>
+      </div>
+      <div class="app-card-desc" style="color:var(--cp-border)">
+        Additional manufacturing operations modules will be added here as they are developed and released.
+      </div>
+      <div class="app-card-footer">
+        <div class="app-card-tags"></div>
+        <span style="font-size:10px;color:var(--cp-border);font-weight:600">Roadmap</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="sec-label"><i class="ti ti-bolt" style="font-size:12px"></i> Quick Launch — DocConfig Modules</div>
+  <div class="quick-grid">
+    <a href="docconfig.html" class="quick-card">
+      <i class="ti ti-file-description"></i>
+      <div><div class="quick-title">SOP Library</div><div class="quick-sub">10 active procedures</div></div>
+    </a>
+    <a href="docconfig.html" class="quick-card">
+      <i class="ti ti-checkbox" style="color:#2E7D32"></i>
+      <div><div class="quick-title">Quality Alerts</div><div class="quick-sub">3 open &middot; 5 total</div></div>
+    </a>
+    <a href="docconfig.html" class="quick-card">
+      <i class="ti ti-alert-triangle" style="color:#B71C1C"></i>
+      <div><div class="quick-title">Safety Alerts</div><div class="quick-sub">2 open &middot; 4 total</div></div>
+    </a>
+    <a href="docconfig.html" class="quick-card">
+      <i class="ti ti-checks" style="color:var(--cp-amber)"></i>
+      <div><div class="quick-title">Approvals</div><div class="quick-sub">6 pending sign-off</div></div>
+    </a>
+    <a href="docconfig.html" class="quick-card">
+      <i class="ti ti-template" style="color:#5B3FA6"></i>
+      <div><div class="quick-title">Templates</div><div class="quick-sub">4 active &middot; rev. controlled</div></div>
+    </a>
+    <a href="docconfig.html" class="quick-card">
+      <i class="ti ti-school" style="color:#5B3FA6"></i>
+      <div><div class="quick-title">Training Packages</div><div class="quick-sub">3 packages &middot; 5 plans</div></div>
+    </a>
+    <a href="docconfig.html" class="quick-card">
+      <i class="ti ti-blueprint"></i>
+      <div><div class="quick-title">Engineering Drawings</div><div class="quick-sub">8 drawings &middot; 3 pending</div></div>
+    </a>
+    <a href="docconfig.html" class="quick-card">
+      <i class="ti ti-books" style="color:var(--cp-amber)"></i>
+      <div><div class="quick-title">Specifications</div><div class="quick-sub">12 reference docs</div></div>
+    </a>
+  </div>
+
+  <!-- CHANGELOG -->
+  <div class="sec-label"><i class="ti ti-git-commit" style="font-size:12px"></i> Release Notes</div>
+  <div class="changelog">
+    <div class="changelog-hdr">
+      <span><i class="ti ti-versions" style="margin-right:6px"></i>Changelog &mdash; DocConfig</span>
+      <span style="font-size:10px;color:var(--cp-gray)">Most recent first</span>
+    </div>
+
+    <div class="cl-entry">
+      <div class="cl-dot feat"></div>
+      <span class="cl-type cl-feat">Feature</span>
+      <div class="cl-msg"><strong>Template Revision Control &amp; Retirement</strong> — Templates now carry full version history with mandatory change reasons on every edit. Admins can retire templates to a read-only archive via a two-field confirmation flow (reason + notes required, Confirm button stays locked until both are filled). Full reverse-timeline visible in sidebar History view.</div>
+      <div class="cl-date">Jun 8, 2026</div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-dot new"></div>
+      <span class="cl-type cl-new">New</span>
+      <div class="cl-msg"><strong>Training Packages module</strong> — Create packages by selecting from a library of 5 pre-built training plans. Package builder shows live summary of total SOPs covered and estimated training hours. Progress tracking (done/total), media attachments, and per-assignee records.</div>
+      <div class="cl-date">Jun 8, 2026</div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-dot new"></div>
+      <span class="cl-type cl-new">New</span>
+      <div class="cl-msg"><strong>Quality Alert &amp; Safety Alert libraries</strong> — Dedicated tabs for QA and SA records. Priority badges (Critical/High/Medium/Low), status tracking (Open/Monitoring/Closed), linked SOPs and specs, media attachments. Standardised New QA and New SA forms with full CAPA fields.</div>
+      <div class="cl-date">Jun 7, 2026</div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-dot feat"></div>
+      <span class="cl-type cl-feat">Feature</span>
+      <div class="cl-msg"><strong>Photos &amp; Videos in SOPs</strong> — Drag-and-drop media upload on New SOP form accepts .jpg, .png, .mp4, .mov. Videos render as dark navy thumbnail with play icon. Media count shown in SOP library table with photo/video indicators.</div>
+      <div class="cl-date">Jun 7, 2026</div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-dot feat"></div>
+      <span class="cl-type cl-feat">Feature</span>
+      <div class="cl-msg"><strong>Approval Workflows, Version History, Access &amp; Roles</strong> — Visual step pipeline editor for approval workflows. Reverse-timeline version history per document. 8-person role roster with Admin / Approver / Author / Viewer badges.</div>
+      <div class="cl-date">Jun 6, 2026</div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-dot new"></div>
+      <span class="cl-type cl-new">New</span>
+      <div class="cl-msg"><strong>DocConfig v1 — Initial Release</strong> — SOP library, Engineering Drawings library, Reference Specifications across 5 named libraries, SOP Templates with section builder, tag and status filters, spec linker, and full ClearPath / Spectrum Killian branding system.</div>
+      <div class="cl-date">Jun 5, 2026</div>
+    </div>
+  </div>
+
+  <!-- REPO INFO -->
+  <div class="sec-label"><i class="ti ti-info-circle" style="font-size:12px"></i> Repository Structure</div>
+  <div style="background:var(--cp-white);border:1px solid var(--cp-border);border-radius:6px;padding:18px 20px;margin-bottom:40px;font-family:monospace;font-size:12px;line-height:1.9;color:var(--cp-navy)">
+    <div style="color:var(--cp-gray);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;font-family:'Segoe UI',sans-serif">clearpath-os /</div>
+    <div><span style="color:var(--cp-blue-active);font-weight:700">index.html</span> <span style="color:var(--cp-gray);font-family:'Segoe UI',sans-serif;font-size:11px">&larr; this file &mdash; application hub &amp; launch page</span></div>
+    <div style="margin-left:20px"><span style="color:var(--cp-orange);font-weight:700">docconfig.html</span> <span style="color:var(--cp-gray);font-family:'Segoe UI',sans-serif;font-size:11px">&mdash; Document Configuration Management (SOPs, Drawings, Alerts, Training)</span></div>
+    <div style="margin-left:20px;color:var(--cp-gray)">daily-performance.html <span style="font-family:'Segoe UI',sans-serif;font-size:11px">&mdash; Coming soon</span></div>
+    <div style="margin-top:8px;color:var(--cp-gray);font-family:'Segoe UI',sans-serif;font-size:11px">All files are self-contained. The only external resource is the Tabler Icons webfont from cdn.jsdelivr.net.</div>
+  </div>
+
+</div><!-- end .page -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">
+    &copy; 2026 <strong>Spectrum Killian</strong> &mdash; ClearPath Operating System &middot;
+    Built for manufacturing operations &middot; All data in-memory, no backend required
+  </div>
+  <div class="footer-links">
+    <a href="docconfig.html"><i class="ti ti-file-description" style="font-size:12px;margin-right:3px"></i>DocConfig</a>
+    <a href="#" style="color:var(--cp-border);cursor:default">Daily Performance</a>
+    <a href="https://github.com" target="_blank"><i class="ti ti-brand-github" style="font-size:12px;margin-right:3px"></i>GitHub</a>
+  </div>
+</div>
+
+</body>
+</html>
